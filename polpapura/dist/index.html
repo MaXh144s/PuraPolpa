@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Conheça a PuraPolpa, a história do nosso açaí em garrafa e suas quatro apresentações."
+    />
+    <title>PuraPolpa — Açaí em garrafa</title>
+    <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
+    <link rel="stylesheet" href="estilo.css" />
+    <script defer src="garrafas.js?v=e0339faa"></script>
+  </head>
+  <body>
+    <header class="wrap">
+      <a class="brand" href="#garrafas" aria-label="PuraPolpa, início"
+        ><span>PuraPolpa</span></a
+      >
+      <nav aria-label="Principal">
+        <a href="#garrafas">As garrafas</a
+        ><a href="#historia">Nossa história</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero wrap" id="garrafas" aria-labelledby="titulo">
+        <div class="copy">
+          <p class="kicker">Açaí em garrafa</p>
+          <h1 id="titulo">Seu açaí de sempre. <em>Agora vai com você.</em></h1>
+          <p class="desc">
+            Depois do almoço, na saída do trabalho ou no fim do treino, bate
+            aquela vontade de tomar um açaí. Escolha sua garrafa e leve esse
+            momento com você.
+          </p>
+          <a class="storylink" href="#historia">Conheça a história</a>
+        </div>
+        <div class="showcase" aria-label="Apresentações da PuraPolpa">
+          <div class="stage" id="stage"><span class="halo"></span></div>
+          <div class="controls">
+            <div id="volumes" role="group" aria-label="Escolher volume"></div>
+            <button id="motion" type="button" aria-label="Pausar animação">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <label class="label-choice"><input type="checkbox" id="sem-rotulo"> Sem rótulo</label>
+        </div>
+      </section>
+      <section id="historia" aria-labelledby="hist-title">
+        <div class="story wrap">
+          <div>
+            <p class="kicker">Nossa história</p>
+            <h2 id="hist-title">A ideia veio de uma cena do dia a dia.</h2>
+          </div>
+          <div class="storytext">
+            <p>
+              Você termina o almoço com vontade de tomar um açaí, mas já está na
+              hora de voltar ao trabalho. Ou sai do treino e ainda tem um
+              caminho inteiro pela frente. Com um copo em uma mão e a colher na
+              outra, até uma pausa simples custa tempo.
+            </p>
+            <p>
+              Foi dessa vontade de levar o açaí junto que nasceu a PuraPolpa, em
+              12 de novembro de 2026. A ideia era simples: colocar o bom e velho
+              açaí em uma garrafa que pudesse acompanhar você. Para tomar depois
+              do almoço, na próxima parada da viagem ou onde der vontade.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap">
+      <div class="footer-brand">
+        <span class="brand">PuraPolpa</span>
+        <em>Sabor que marca!</em>
+      </div>
+      <address class="footer-contact">
+        <a href="https://wa.link/3lx6vb" target="_blank" rel="noopener noreferrer">
+          <img src="icones/whatsapp.png" alt="" width="24" height="24">
+          <span>Fale pelo WhatsApp</span>
+        </a>
+        <a href="https://www.instagram.com/purapolpa_oficial/" target="_blank" rel="noopener noreferrer">
+          <img src="icones/instagram.png" alt="" width="24" height="24">
+          <span>Instagram · @purapolpa_oficial</span>
+        </a>
+        <a href="mailto:purapolpaacaioficial@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="E-mail de suporte: purapolpaacaioficial@gmail.com">
+          <img src="icones/email.png" alt="" width="24" height="24">
+          <span>purapolpaacaioficial@gmail.com</span>
+        </a>
+      </address>
+    </footer>
+  </body>
+</html>

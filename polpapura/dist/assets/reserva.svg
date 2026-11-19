@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 465">
+<defs>
+<linearGradient id="juice"><stop stop-color="#210c22"/><stop offset=".12" stop-color="#371534"/><stop offset=".22" stop-color="#5d3456"/><stop offset=".32" stop-color="#492440"/><stop offset=".66" stop-color="#36192f"/><stop offset=".85" stop-color="#291126"/><stop offset="1" stop-color="#54334b"/></linearGradient>
+<linearGradient id="lid"><stop stop-color="#baa8b7"/><stop offset=".16" stop-color="#eee6e8"/><stop offset=".45" stop-color="#fffaf5"/><stop offset="1" stop-color="#c4b5bf"/></linearGradient>
+<linearGradient id="paper"><stop stop-color="#cdbbc7"/><stop offset=".18" stop-color="#ece0e6"/><stop offset=".45" stop-color="#f8f0ef"/><stop offset=".8" stop-color="#ede1e6"/><stop offset="1" stop-color="#ccb7c6"/></linearGradient>
+<pattern id="rib" width="4" height="5" patternUnits="userSpaceOnUse"><path d="M1 0v5" stroke="#907e8e" opacity=".42"/></pattern>
+</defs>
+<path d="M74 40h62v28c0 12 9 19 23 32 20 19 23 28 23 52v266q0 27-13 32c-22 8-106 8-128 0q-13-5-13-32V152c0-24 4-34 23-52 14-13 23-20 23-32Z" fill="url(#juice)" stroke="#372232" stroke-width="2"/>
+<path d="M39 146q0-20 22-40l20-20" stroke="#f2d9e5" stroke-width="5" fill="none" opacity=".2" stroke-linecap="round"/>
+<rect x="69" y="12" width="72" height="38" rx="6" fill="url(#lid)"/><rect x="71" y="15" width="68" height="31" rx="4" fill="url(#rib)"/><rect x="69" y="49" width="72" height="8" rx="3" fill="url(#lid)"/>
+<path d="M28 174q77 10 154 0v176q-77 12-154 0Z" fill="url(#paper)"/>
+<g text-anchor="middle" fill="#490052"><text x="105" y="210" font-family="Arial,sans-serif" font-size="9" letter-spacing="2.2">AÇAÍ EM GARRAFA</text>
+<text x="104" y="254" font-size="34" font-family="Georgia,serif" font-style="italic" font-weight="bold" letter-spacing="-2.7">PuraPolpa</text>
+<path d="M86 266q20-5 40-2" fill="none" stroke="#d2a72f" stroke-width="3" stroke-linecap="round"/>
+<g transform="translate(105 314)" fill="#593155"><path d="M-1-12q3-20 20-24-2 15-20 19m0 3q-15 1-19-12 15 0 19 12"/><circle cx="-10" cy="1" r="9"/><circle cx="7" cy="-4" r="9"/><circle cx="2" cy="11" r="9"/></g></g>
+<path d="M37 433q65 12 136 0" fill="none" stroke="#b49bab" stroke-width="3" opacity=".25"/>
+</svg>

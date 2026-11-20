@@ -5,6 +5,16 @@ const tipos = {receita:"Receita", produto:"Produto"};
 const normalizar = nome => nome.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 let registro, chave, chaveSenha, editando;
 let itens = [];
+const modoOnline = document.documentElement.dataset.catalogo === "online";
+
+async function persistir(novos, acao, dados) {
+  if (modoOnline) {
+    itens = await window.catalogoOnline.alterar(acao, dados);
+  } else {
+    registro = await gravarCatalogo(registro, chave, novos);
+    itens = novos;
+  }
+}
 
 
 function aviso(texto) { el("aviso").textContent = texto; }
@@ -65,6 +75,7 @@ async function iniciar() {
 }
 el("login").onsubmit = async evento => {
   evento.preventDefault();
+  if (modoOnline) return;
   const usuario = el("usuario").value.trim();
   if (!usuario) return aviso("Informe o nome do usuário.");
   el("entrar").disabled = true;
@@ -136,8 +147,7 @@ async function remover(item) {
   if (!confirm("Remover “" + item.nome + "” do catálogo?")) return;
   try {
     const novos = itens.filter(i => i.id !== item.id);
-    registro = await gravarCatalogo(registro, chave, novos);
-    itens = novos;
+    await persistir(novos, "remover", {id:item.id});
     if (editando === item.id) editar();
     for (const select of el("ingredientes").querySelectorAll("select")) {
       const opcao = Array.from(select.options).find(o => o.value === item.id);
@@ -264,8 +274,7 @@ el("item").onsubmit = async evento => {
 
     const produtos = new Map(novos.map(i => [i.id, i]));
     novos = novos.map(i => i.componentes ? {...i, ...totaisComponentes(i.componentes, produtos)} : i);
-    registro = await gravarCatalogo(registro, chave, novos);
-    itens = novos;
+    await persistir(novos, "salvar", item);
     el("busca").value = "";
     editar();
     listar();
@@ -274,4 +283,4 @@ el("item").onsubmit = async evento => {
   } catch (erro) { aviso(erro.message); }
   finally { el("salvar").disabled = false; }
 };
-iniciar();
+if (!modoOnline) iniciar();

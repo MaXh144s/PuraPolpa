@@ -1,11 +1,27 @@
 import { createHash } from "node:crypto";
-import { cp, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { build } from "esbuild";
 
 const origem = "polpapura/dist";
 const destino = "out";
 await cp(origem, destino, { recursive: true });
+const url = process.env.SUPABASE_URL?.trim();
+const key = process.env.SUPABASE_PUBLISHABLE_KEY?.trim();
+if (url || key) {
+  if (!url || new URL(url).protocol !== "https:" || !/^sb_publishable_[\w-]+$/.test(key || "")) {
+    throw new Error("Configure SUPABASE_URL (HTTPS) e SUPABASE_PUBLISHABLE_KEY (sb_publishable_...) juntas.");
+  }
+  await build({ entryPoints:["src/admin-nuvem.js"], outfile:path.join(destino,"admin-nuvem.js"),
+    bundle:true, minify:true, platform:"browser", format:"iife",
+    define:{ SUPABASE_URL:JSON.stringify(url), SUPABASE_PUBLISHABLE_KEY:JSON.stringify(key) } });
+  const admin = await readFile(path.join(origem,"admin.html"),"utf8");
+  await writeFile(path.join(destino,"admin.html"),admin.replace('<html lang="pt-BR">','<html lang="pt-BR" data-catalogo="online">')
+    .replace('src="recuperacao.js"','src="admin-nuvem.js"'));
+} else {
+  await rm(path.join(destino,"admin-nuvem.js"),{force:true});
+}
 await mkdir(path.join(destino, "fotos"), { recursive: true });
 const fotos = {};
 for (const arquivo of await readdir(path.join(origem, "garrafas"))) {

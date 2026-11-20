@@ -59,6 +59,7 @@ return 0`;
 
 export default async function handler(req,res) {
   res.setHeader("Cache-Control","no-store");
+  if (process.env.SUPABASE_URL) return res.status(410).json({erro:"Use a recuperação de senha do painel online."});
   if (req.method !== "POST") { res.setHeader("Allow","POST"); return res.status(405).end(); }
   if (!req.headers["content-type"]?.startsWith("application/json")) return res.status(415).end();
   const segredo = process.env.RECOVERY_SECRET;

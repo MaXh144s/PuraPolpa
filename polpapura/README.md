@@ -8,7 +8,11 @@ Importe o repositório Git na Vercel e mantenha o diretório raiz do projeto em 
 
 O painel mantém o login e o catálogo no navegador, vinculados ao endereço do site. Ao mudar de domínio, o cadastro e os custos anteriores continuam disponíveis no endereço original. O primeiro acesso ao novo endereço inicia um catálogo local.
 
-### Ativar o envio de códigos
+### Painel online com Supabase
+
+O [guia de ativação](../supabase/CONFIGURACAO.md) cobre o banco, a conta administrativa, o e-mail, a Vercel e a importação do catálogo existente. Sem as duas variáveis de configuração da Supabase, o painel permanece no modo local. Em modo online, o painel usa a Supabase e comunica falhas de conexão.
+
+### Envio de códigos no modo local anterior
 
 No projeto da Vercel, abra **Settings → Environment Variables** e configure os valores no ambiente **Production**. Guarde os segredos em um gerenciador de senhas.
 

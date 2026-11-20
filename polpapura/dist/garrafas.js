@@ -53,12 +53,30 @@ const pedido = document.querySelector("#pedido");
 const formulario = document.querySelector("#personalizar");
 const fotoPedido = document.querySelector("#pedido-foto");
 let volumePedido;
+let quantidade = 1;
+const volumesPedido = document.querySelector("#volumes-pedido");
+for (const [i, item] of apresentacoes.entries()) {
+  const botao = document.createElement("button");
+  botao.type = "button";
+  botao.textContent = item.volume;
+  botao.onclick = () => escolherVolume(i, fotoApresentacao(i));
+  volumesPedido.append(botao);
+}
+
+function mudarQuantidade(delta) {
+  quantidade = Math.max(1, quantidade + delta);
+  document.querySelector("#quantidade").value = String(quantidade);
+  document.querySelector("#diminuir").disabled = quantidade === 1;
+  atualizarMensagem();
+}
+document.querySelector("#diminuir").onclick = () => mudarQuantidade(-1);
+document.querySelector("#aumentar").onclick = () => mudarQuantidade(1);
 
 function atualizarMensagem() {
   const acompanhamentos = new FormData(formulario).getAll("acompanhamento");
   const notas = document.querySelector("#observacoes").value.trim();
   const mensagem = [
-    "Olá, PuraPolpa! Gostaria de pedir um açaí de " + volumePedido + ".",
+    "Olá, PuraPolpa! Gostaria de pedir " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") + " de açaí de " + volumePedido + ".",
     acompanhamentos.length ? "Acompanhamentos: " + acompanhamentos.join(", ") + "." : "Sem acompanhamentos.",
   ];
   if (notas) mensagem.push("Observações: " + notas);
@@ -67,14 +85,17 @@ function atualizarMensagem() {
   document.querySelector("#enviar-pedido").href = destino.href;
 }
 
-function abrirPedido(i) {
-  const imagem = slides[i].querySelector("img");
+function escolherVolume(i, imagem) {
   volumePedido = apresentacoes[i].volume;
   fotoPedido.src = imagem.src;
   fotoPedido.alt = imagem.alt;
   document.querySelector("#pedido-volume").textContent = volumePedido;
-  pedido.hidden = false;
+  Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
   atualizarMensagem();
+}
+function abrirPedido(i) {
+  escolherVolume(i, slides[i].querySelector("img"));
+  pedido.hidden = false;
   document.querySelector("#pedido-titulo").focus({ preventScroll: true });
 }
 fotoPedido.onerror = () => {
@@ -83,16 +104,20 @@ fotoPedido.onerror = () => {
 document.querySelector("#pedir").onclick = () => abrirPedido(active);
 formulario.addEventListener("input", atualizarMensagem);
 
-function mostrarFoto(i) {
+function fotoApresentacao(i) {
   const item = apresentacoes[i];
   let caminho = item.foto;
   if (semRotulo.checked) {
     caminho = item.semRotulo || fotosGenericas[proximaGenerica];
     if (!item.semRotulo) proximaGenerica = (proximaGenerica + 1) % fotosGenericas.length;
   }
-  const photo = slides[i].querySelector("img");
-  photo.alt = semRotulo.checked ? "Garrafa de açaí PuraPolpa sem rótulo" : "Garrafa de açaí PuraPolpa de " + item.volume;
-  photo.src = urlFoto(caminho);
+  return {
+    src: urlFoto(caminho),
+    alt: semRotulo.checked ? "Garrafa de açaí PuraPolpa sem rótulo" : "Garrafa de açaí PuraPolpa de " + item.volume
+  };
+}
+function mostrarFoto(i) {
+  Object.assign(slides[i].querySelector("img"), fotoApresentacao(i));
 }
 semRotulo.onchange = () => {
   mostrarFoto(active);

@@ -377,6 +377,12 @@ footer em {
 .pedido h2 { margin: .5rem 0 1rem; font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.08; }
 .pedido fieldset { border: 0; padding: 0; margin: 0 0 1rem; }
 .pedido legend, .pedido label[for] { font-weight: 700; }
+.opcoes-pedido { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .45rem; }
+.opcoes-pedido button { min-height: 44px; padding: .45rem .8rem; border: 1px solid #bfadbc; border-radius: 2rem; color: var(--purple); background: transparent; }
+.opcoes-pedido [aria-pressed="true"] { background: var(--purple); border-color: var(--purple); color: white; }
+.contador button { width: 44px; font-size: 1.25rem; }
+.contador button:disabled { opacity: .45; cursor: default; }
+.contador output { min-width: 3ch; text-align: center; font-variant-numeric: tabular-nums; }
 .pedido fieldset label { display: flex; align-items: center; gap: .6rem; min-height: 2.4rem; cursor: pointer; }
 .pedido input { width: 1.1rem; height: 1.1rem; accent-color: var(--purple); }
 .pedido textarea { display: block; width: 100%; margin-top: .4rem; padding: .7rem; font: inherit; border: 1px solid #ab95a7; border-radius: .6rem; resize: vertical; }

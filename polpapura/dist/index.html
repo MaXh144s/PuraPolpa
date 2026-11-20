@@ -57,6 +57,18 @@
           <h2 id="pedido-titulo" tabindex="-1">Açaí de <span id="pedido-volume"></span></h2>
           <form id="personalizar">
             <fieldset>
+              <legend>Volume por garrafa</legend>
+              <div class="opcoes-pedido" id="volumes-pedido"></div>
+            </fieldset>
+            <fieldset>
+              <legend>Quantidade de garrafas</legend>
+              <div class="opcoes-pedido contador">
+                <button type="button" id="diminuir" aria-label="Diminuir quantidade" disabled>−</button>
+                <output id="quantidade" aria-label="Quantidade de garrafas">1</output>
+                <button type="button" id="aumentar" aria-label="Aumentar quantidade">+</button>
+              </div>
+            </fieldset>
+            <fieldset>
               <legend>Escolha os acompanhamentos</legend>
               <label><input type="checkbox" name="acompanhamento" value="Musse de maracujá" checked> Musse de maracujá</label>
               <label><input type="checkbox" name="acompanhamento" value="Leite em pó" checked> Leite em pó</label>
@@ -65,7 +77,6 @@
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
             <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Continuar no WhatsApp</a>
-            <a class="history-link" href="#garrafas">Escolher outra garrafa</a>
           </form>
         </div>
       </section>

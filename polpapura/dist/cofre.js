@@ -26,6 +26,23 @@ async function abrirCatalogo(registro, chave) {
   return JSON.parse(new TextDecoder().decode(dados));
 }
 
+async function importarChave(bytes) {
+  return crypto.subtle.importKey("raw", bytes, "AES-GCM", false, ["encrypt","decrypt"]);
+}
+
+async function chaveDoCatalogo(registro, chaveSenha) {
+  if (!registro.recuperacao) return chaveSenha;
+  const {iv, protegida} = registro.recuperacao;
+  const bytes = await crypto.subtle.decrypt({name:"AES-GCM", iv}, chaveSenha, protegida);
+  return importarChave(bytes);
+}
+
+async function protegerChave(bytes, chaveSenha, cofre, email) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const protegida = await crypto.subtle.encrypt({name:"AES-GCM", iv}, chaveSenha, bytes);
+  return {iv, protegida, cofre, email};
+}
+
 async function gravarCatalogo(anterior, chave, itens) {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const dados = await crypto.subtle.encrypt({name:"AES-GCM", iv}, chave, new TextEncoder().encode(JSON.stringify(itens)));

@@ -1,6 +1,13 @@
 {
   "name": "purapolpa",
   "private": true,
-  "scripts": { "build": "node scripts/gerar-site.mjs" },
-  "devDependencies": { "sharp": "0.35.5" }
+  "scripts": {
+    "build": "node scripts/gerar-site.mjs"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  },
+  "dependencies": {
+    "nodemailer": "^10.6.1"
+  }
 }

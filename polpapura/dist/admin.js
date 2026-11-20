@@ -3,7 +3,7 @@ const moeda = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"})
 const gramas = new Intl.NumberFormat("pt-BR", {maximumFractionDigits:3});
 const tipos = {receita:"Receita", produto:"Produto"};
 const normalizar = nome => nome.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-let registro, chave, editando;
+let registro, chave, chaveSenha, editando;
 let itens = [];
 
 
@@ -60,6 +60,7 @@ async function iniciar() {
     el("senha").minLength = registro ? 1 : 8;
     el("entrar").textContent = registro ? "Entrar" : "Criar acesso";
     el("entrar").disabled = false;
+    el("esqueci").hidden = !registro;
   } catch { aviso("O armazenamento local está indisponível. Abra o site em uma conexão segura e permita o armazenamento neste navegador."); }
 }
 el("login").onsubmit = async evento => {
@@ -73,13 +74,18 @@ el("login").onsubmit = async evento => {
     const tentativa = await chaveLocal(el("senha").value, base.sal);
     if (registro) {
       if (usuario !== registro.usuario) throw new Error("Credenciais inválidas.");
-      try { itens = await abrirCatalogo(registro, tentativa); }
+      try {
+        chave = await chaveDoCatalogo(registro, tentativa);
+        itens = await abrirCatalogo(registro, chave);
+      }
       catch { throw new Error("Credenciais inválidas."); }
       itens = adaptarCatalogo(itens);
     } else {
       registro = await gravarCatalogo(base, tentativa, []);
+      chave = tentativa;
     }
-    chave = tentativa;
+    chaveSenha = tentativa;
+    el("ativar-recuperacao").hidden = Boolean(registro.recuperacao);
     el("login").reset();
     el("acesso").hidden = true;
     el("sair").hidden = el("painel").hidden = false;

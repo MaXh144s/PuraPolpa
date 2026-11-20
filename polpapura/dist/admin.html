@@ -3,7 +3,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>Custos de produção · PuraPolpa</title>
 <link rel="icon" href="icones/favicon.png"><link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="admin.css">
-<script defer src="cofre.js"></script><script defer src="admin.js?v=composicao3"></script>
+<script defer src="cofre.js?v=recuperacao1"></script><script defer src="admin.js?v=recuperacao1"></script><script defer src="recuperacao.js"></script>
 </head><body>
 <header class="wrap"><a class="brand" href="index.html">PuraPolpa</a><nav><a href="index.html">Voltar à vitrine</a><button id="sair" hidden>Sair</button></nav></header>
 <main class="wrap admin">
@@ -12,8 +12,18 @@
 <form id="login"><label>Usuário<input id="usuario" required autocomplete="username"></label>
 <label>Senha<input id="senha" type="password" required autocomplete="current-password"></label>
 <button class="principal" id="entrar" disabled>Entrar</button></form>
+<button type="button" id="esqueci" hidden>Esqueci minha senha</button>
 <p class="nota">Os dados ficam neste navegador. Limpar os dados do site remove o cadastro e o catálogo.</p></section>
+<section id="recuperacao" class="acesso" aria-labelledby="titulo-recuperacao" hidden>
+<p class="kicker">Área administrativa</p><h1 id="titulo-recuperacao">Recuperar senha</h1>
+<form id="verificacao"><label>E-mail cadastrado<input type="email" id="email-recuperacao" required autocomplete="email"></label>
+<div id="etapa-codigo" hidden><label>Código de verificação<input id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{8}" maxlength="8" required disabled></label>
+<label id="campo-nova-senha" hidden>Nova senha<input id="nova-senha" type="password" autocomplete="new-password" minlength="8" required disabled></label></div>
+<button class="principal" id="verificar">Enviar código</button>
+<button type="button" id="reenviar" hidden>Reenviar código</button>
+<button type="button" id="cancelar-verificacao">Voltar</button></form></section>
 <section id="painel" hidden><p class="kicker">Área administrativa</p><h1>Custos de produção</h1>
+<button type="button" id="ativar-recuperacao">Ativar recuperação por e-mail</button>
 <div class="colunas"><section class="catalogo"><h2>Catálogo</h2>
 <label>Buscar no catálogo<input type="search" id="busca" placeholder="Nome da receita ou do produto"></label>
 <ul id="lista"></ul></section>

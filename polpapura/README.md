@@ -4,7 +4,7 @@ Abra dist/index.html em um navegador. A página funciona diretamente pelo arquiv
 
 ## Publicação na Vercel
 
-Importe o repositório Git na Vercel e mantenha o diretório raiz do projeto em `.`. O `vercel.json` na raiz seleciona o preset estático (Other), dispensa a compilação e publica a pasta `polpapura/dist`. O app funciona sem variáveis de ambiente. A vitrine abre em `/` e o painel de custos em `/admin.html`.
+Importe o repositório Git na Vercel e mantenha o diretório raiz do projeto em `.`. O `vercel.json` usa o preset estático (Other), executa `npm run build` e publica a pasta `out`. Para reproduzir a versão otimizada localmente, execute `npm ci` e `npm run build` na raiz. O app funciona sem variáveis de ambiente. A vitrine abre em `/` e o painel de custos em `/admin.html`.
 
 O painel mantém o login e o catálogo no navegador, vinculados ao endereço do site. Ao mudar de domínio, o cadastro e os custos anteriores continuam disponíveis no endereço original. O primeiro acesso ao novo endereço inicia um catálogo local.
 
@@ -14,7 +14,7 @@ Edite os títulos, parágrafos, navegação e assinatura em dist/index.html. A a
 
 ## Fotografias
 
-Substitua o PNG correspondente em [dist/garrafas](dist/garrafas/), mantendo o nome, e recarregue a página local. O carrossel lê esses arquivos diretamente. Para atualizar a página hospedada, publique o site com a pasta atualizada.
+Substitua o PNG correspondente em [dist/garrafas](dist/garrafas/), mantendo o nome. A página local usa o original. A cada publicação, o build gera versões WebP com transparência e compressão sem perdas em várias resoluções. O navegador escolhe o tamanho conforme a tela. O conteúdo da imagem determina a URL usada no cache.
 
 | Apresentação | Arquivo |
 | --- | --- |

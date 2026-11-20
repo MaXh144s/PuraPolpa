@@ -1,0 +1,6 @@
+{
+  "name": "purapolpa",
+  "private": true,
+  "scripts": { "build": "node scripts/gerar-site.mjs" },
+  "devDependencies": { "sharp": "0.35.5" }
+}

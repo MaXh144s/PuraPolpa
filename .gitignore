@@ -3,6 +3,7 @@
 
 # Configuração local de deploy e variáveis de ambiente
 .vercel/
+/out/
 .env
 .env.*
 !.env.example

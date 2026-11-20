@@ -1,4 +1,23 @@
 const pastaGarrafas = "garrafas/";
+const fotosResponsivas = JSON.parse(document.querySelector("#fotos-responsivas")?.textContent || "{}");
+function carregarFoto(img, arquivo, alt) {
+  const variante = fotosResponsivas[arquivo];
+  img.alt = alt;
+  img.dataset.arquivo = arquivo;
+  if (variante) {
+    img.sizes = variante.sizes;
+    img.srcset = variante.srcset;
+  } else {
+    img.removeAttribute("srcset");
+  }
+  img.src = urlFoto(arquivo);
+}
+
+function recuperarFoto(evento) {
+  const img = evento.currentTarget;
+  if (img.hasAttribute("srcset")) img.removeAttribute("srcset");
+  else if (img.getAttribute("src") !== "assets/reserva.svg") img.src = "assets/reserva.svg";
+}
 function urlFoto(arquivo) {
   return pastaGarrafas + arquivo;
 }
@@ -18,9 +37,10 @@ const volumes = document.querySelector("#volumes");
 const motion = document.querySelector("#motion");
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
 let active = 0;
-let paused = false;
+let paused = Boolean(navigator.connection?.saveData || ["slow-2g", "2g"].includes(navigator.connection?.effectiveType));
 let timer;
 let animations = [];
+let troca = 0;
 
 const slides = apresentacoes.map(({ volume, foto, altura }, i) => {
   const slide = document.createElement("a");
@@ -31,13 +51,11 @@ const slides = apresentacoes.map(({ volume, foto, altura }, i) => {
   slide.hidden = i !== active;
   slide.style.setProperty("--height", altura);
   const photo = new Image();
-  photo.alt = "Garrafa de açaí PuraPolpa de " + volume;
-  photo.onerror = () => {
-    if (photo.getAttribute("src") === "assets/reserva.svg") return;
-    photo.src = "assets/reserva.svg";
-    photo.alt = "Ilustração de garrafa";
-  };
-  photo.src = urlFoto(foto);
+  photo.onerror = recuperarFoto;
+  if (i === active) {
+    photo.fetchPriority = "high";
+    carregarFoto(photo, foto, "Garrafa de açaí PuraPolpa de " + volume);
+  }
   slide.append(photo);
   stage.append(slide);
   const button = document.createElement("button");
@@ -87,20 +105,18 @@ function atualizarMensagem() {
 
 function escolherVolume(i, imagem) {
   volumePedido = apresentacoes[i].volume;
-  fotoPedido.src = imagem.src;
-  fotoPedido.alt = imagem.alt;
+  carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
   document.querySelector("#pedido-volume").textContent = volumePedido;
   Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
   atualizarMensagem();
 }
 function abrirPedido(i) {
-  escolherVolume(i, slides[i].querySelector("img"));
+  const foto = slides[i].querySelector("img");
+  escolherVolume(i, {arquivo: foto.dataset.arquivo, alt: foto.alt});
   pedido.hidden = false;
   document.querySelector("#pedido-titulo").focus({ preventScroll: true });
 }
-fotoPedido.onerror = () => {
-  if (fotoPedido.getAttribute("src") !== "assets/reserva.svg") fotoPedido.src = "assets/reserva.svg";
-};
+fotoPedido.onerror = recuperarFoto;
 document.querySelector("#pedir").onclick = () => abrirPedido(active);
 formulario.addEventListener("input", atualizarMensagem);
 
@@ -112,14 +128,18 @@ function fotoApresentacao(i) {
     if (!item.semRotulo) proximaGenerica = (proximaGenerica + 1) % fotosGenericas.length;
   }
   return {
-    src: urlFoto(caminho),
+    arquivo: caminho,
     alt: semRotulo.checked ? "Garrafa de açaí PuraPolpa sem rótulo" : "Garrafa de açaí PuraPolpa de " + item.volume
   };
 }
 function mostrarFoto(i) {
-  Object.assign(slides[i].querySelector("img"), fotoApresentacao(i));
+  const img = slides[i].querySelector("img");
+  const foto = fotoApresentacao(i);
+  carregarFoto(img, foto.arquivo, foto.alt);
+  return img;
 }
 semRotulo.onchange = () => {
+  troca++;
   mostrarFoto(active);
   agendar();
 };
@@ -131,9 +151,13 @@ function agendar() {
   }
 }
 
-function selecionar(next) {
-  if (next === active) return;
+async function selecionar(next) {
+  const pedidoTroca = ++troca;
+  if (next === active) { agendar(); return; }
   clearTimeout(timer);
+  const foto = mostrarFoto(next);
+  try { await foto.decode(); } catch { /* O carregamento alternativo é tratado em recuperarFoto. */ }
+  if (pedidoTroca !== troca) return;
   for (const animation of animations) {
     animation.onfinish = null;
     animation.cancel();
@@ -141,7 +165,6 @@ function selecionar(next) {
   animations = [];
   const anterior = slides[active];
   active = next;
-  mostrarFoto(next);
   slides.forEach((slide, i) => {
     slide.hidden = i !== next;
     volumes.children[i].setAttribute("aria-pressed", String(i === next));
@@ -162,7 +185,7 @@ function atualizarControle() {
   motion.title = motion.getAttribute("aria-label");
   agendar();
 }
-motion.onclick = () => { paused = !paused; atualizarControle(); };
+motion.onclick = () => { troca++; paused = !paused; atualizarControle(); };
 reduced.addEventListener("change", () => {
   if (reduced.matches) animations.forEach(animation => animation.finish());
   atualizarControle();
@@ -171,3 +194,5 @@ document.addEventListener("visibilitychange", agendar);
 stage.addEventListener("focusin", agendar);
 stage.addEventListener("focusout", () => queueMicrotask(agendar));
 atualizarControle();
+clearTimeout(timer);
+slides[active].querySelector("img").decode().then(agendar, agendar);

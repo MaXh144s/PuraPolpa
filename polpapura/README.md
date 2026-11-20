@@ -2,6 +2,12 @@
 
 Abra dist/index.html em um navegador. A página funciona diretamente pelo arquivo.
 
+## Publicação na Vercel
+
+Importe o repositório Git na Vercel e mantenha o diretório raiz do projeto em `.`. O `vercel.json` na raiz seleciona o preset estático (Other), dispensa a compilação e publica a pasta `polpapura/dist`. O app funciona sem variáveis de ambiente. A vitrine abre em `/` e o painel de custos em `/admin.html`.
+
+O painel mantém o login e o catálogo no navegador, vinculados ao endereço do site. Ao mudar de domínio, o cadastro e os custos anteriores continuam disponíveis no endereço original. O primeiro acesso ao novo endereço inicia um catálogo local.
+
 ## Textos e identidade
 
 Edite os títulos, parágrafos, navegação e assinatura em dist/index.html. A apresentação visual está em dist/estilo.css. A grafia segue os rótulos fornecidos. Para usar a logo oficial, substitua o texto nos elementos de classe brand pela imagem original com alt="PuraPolpa".

@@ -359,3 +359,27 @@ footer em {
 }
 .label-choice input { accent-color: var(--purple); width: 1rem; height: 1rem; }
 .label-choice input:focus-visible { outline: 3px solid #8e3988; outline-offset: 3px; }
+
+.history-link { display: inline-block; padding: .75rem; text-decoration: underline; text-underline-offset: .2em; }
+.slide:focus-visible { outline-offset: -3px; }
+.slide { -webkit-tap-highlight-color: transparent; }
+.pedido {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+  gap: 6%;
+  align-items: center;
+  padding-block: 3rem;
+  border-top: 1px solid #ddcfd9;
+}
+.pedido[hidden] { display: none; }
+.pedido figure { text-align: center; }
+#pedido-foto { width: 100%; height: clamp(200px, 29vw, 400px); object-fit: contain; }
+.pedido h2 { margin: .5rem 0 1rem; font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.08; }
+.pedido fieldset { border: 0; padding: 0; margin: 0 0 1rem; }
+.pedido legend, .pedido label[for] { font-weight: 700; }
+.pedido fieldset label { display: flex; align-items: center; gap: .6rem; min-height: 2.4rem; cursor: pointer; }
+.pedido input { width: 1.1rem; height: 1.1rem; accent-color: var(--purple); }
+.pedido textarea { display: block; width: 100%; margin-top: .4rem; padding: .7rem; font: inherit; border: 1px solid #ab95a7; border-radius: .6rem; resize: vertical; }
+@media (max-width: 760px) {
+  .pedido { grid-template-columns: 1fr; gap: 1rem; padding-block: 2rem; }
+}

@@ -1,0 +1,34 @@
+.admin {padding-block:clamp(2rem,5vw,5rem)}
+.admin [hidden], header [hidden]{display:none}
+.admin h1{font-size:clamp(2.6rem,5vw,4.6rem);margin:.6rem 0 1.5rem}
+.admin h2{font-size:2rem;margin:0}
+.acesso{max-width:26rem;margin:0 auto}
+.admin p,.admin label{line-height:1.5}
+.admin form,.admin label,.editor,.catalogo{display:grid;gap:1rem;align-content:start}
+.admin label{gap:.3rem}
+.admin form,.catalogo>label{margin-top:1rem}
+.admin input,.admin select,.admin button,header button{font:inherit;color:inherit}
+.admin input,.admin select{width:100%;min-width:0;padding:.65rem;background:white;border:1px solid #a995a7;border-radius:.5rem}
+.admin button,header button{background:transparent;border:1px solid #bfadbc;border-radius:1.5rem;padding:.5rem .9rem;justify-self:start}
+.admin .principal{background:var(--purple);color:white;border:0;padding:.75rem 1.4rem}
+.nota,#detalhe{color:#665663;font-size:.9rem}.nota{margin-top:1rem}
+.colunas{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:6%;border-top:1px solid #ddcfd9;padding-top:2rem}
+.linha{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+#lista{list-style:none;margin:0;padding:0;max-height:65vh;overflow:auto}
+#lista li{border-bottom:1px solid #e4dce2;padding:.65rem 0}
+#lista button{display:grid;text-align:left;width:100%;border:0;border-radius:.4rem;padding:.5rem;overflow-wrap:anywhere}
+#lista button:hover,#lista button[aria-current=true]{background:#f3edf3}
+#lista small{color:#695763}
+.resumo{display:grid;gap:.3rem;background:#f3edf3;border-radius:.6rem;padding:1rem}
+.resumo strong{font:2rem Display,Georgia,serif}
+#aviso{margin-top:1rem;color:var(--purple)}
+#totais-manuais{display:grid;gap:1rem}
+#opcao-composicao{display:flex;align-items:center;gap:.6rem;cursor:pointer}
+#automatico{width:1.1rem;height:1.1rem;accent-color:var(--purple)}
+#opcao-composicao[hidden],#totais-manuais[hidden]{display:none}
+#composicao{min-width:0;margin:0;border:1px solid #bfadbc;border-radius:.6rem;padding:1rem}
+.ingrediente{display:grid;gap:.5rem;grid-template-columns:minmax(0,1fr) minmax(5rem,.65fr);margin:.5rem 0 1rem}
+.ingrediente button{grid-column:1/-1}
+#lista .acoes{display:flex;gap:.5rem;margin:.2rem .5rem}
+#lista .acoes button{width:auto;text-decoration:underline}
+@media(max-width:760px){.colunas{grid-template-columns:1fr;gap:2rem}#lista{max-height:36vh}}

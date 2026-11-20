@@ -1,8 +1,6 @@
-// A mesma URL é reutilizada durante a visita. Reabrir a página busca as fotos atuais.
 const pastaGarrafas = "garrafas/";
-const versaoDasFotos = Date.now();
 function urlFoto(arquivo) {
-  return pastaGarrafas + arquivo + "?v=" + versaoDasFotos;
+  return pastaGarrafas + arquivo;
 }
 const apresentacoes = [
   { volume: "250 ml", foto: "garrafa-250.png", altura: "84%" },
@@ -19,34 +17,27 @@ const stage = document.querySelector("#stage");
 const volumes = document.querySelector("#volumes");
 const motion = document.querySelector("#motion");
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-const caption = document.createElement("p");
-caption.className = "caption";
-stage.after(caption);
 let active = 0;
 let paused = false;
 let timer;
 let animations = [];
 
-function atualizarLegenda() {
-  caption.textContent = slides[active].dataset.foto ? "\u00a0" : "Imagem ilustrativa";
-}
-
 const slides = apresentacoes.map(({ volume, foto, altura }, i) => {
-  const slide = document.createElement("div");
+  const slide = document.createElement("a");
+  slide.href = "#pedido";
+  slide.setAttribute("aria-label", "Personalizar açaí de " + volume);
+  slide.onclick = () => abrirPedido(i);
   slide.className = "slide";
   slide.hidden = i !== active;
   slide.style.setProperty("--height", altura);
   const photo = new Image();
   photo.alt = "Garrafa de açaí PuraPolpa de " + volume;
   photo.onerror = () => {
-    slide.dataset.foto = "";
-    photo.onerror = null;
+    if (photo.getAttribute("src") === "assets/reserva.svg") return;
     photo.src = "assets/reserva.svg";
     photo.alt = "Ilustração de garrafa";
-    atualizarLegenda();
   };
   photo.src = urlFoto(foto);
-  slide.dataset.foto = "sim";
   slide.append(photo);
   stage.append(slide);
   const button = document.createElement("button");
@@ -58,6 +49,40 @@ const slides = apresentacoes.map(({ volume, foto, altura }, i) => {
   return slide;
 });
 
+const pedido = document.querySelector("#pedido");
+const formulario = document.querySelector("#personalizar");
+const fotoPedido = document.querySelector("#pedido-foto");
+let volumePedido;
+
+function atualizarMensagem() {
+  const acompanhamentos = new FormData(formulario).getAll("acompanhamento");
+  const notas = document.querySelector("#observacoes").value.trim();
+  const mensagem = [
+    "Olá, PuraPolpa! Gostaria de pedir um açaí de " + volumePedido + ".",
+    acompanhamentos.length ? "Acompanhamentos: " + acompanhamentos.join(", ") + "." : "Sem acompanhamentos.",
+  ];
+  if (notas) mensagem.push("Observações: " + notas);
+  const destino = new URL("https://wa.me/5551985870775");
+  destino.searchParams.set("text", mensagem.join("\n"));
+  document.querySelector("#enviar-pedido").href = destino.href;
+}
+
+function abrirPedido(i) {
+  const imagem = slides[i].querySelector("img");
+  volumePedido = apresentacoes[i].volume;
+  fotoPedido.src = imagem.src;
+  fotoPedido.alt = imagem.alt;
+  document.querySelector("#pedido-volume").textContent = volumePedido;
+  pedido.hidden = false;
+  atualizarMensagem();
+  document.querySelector("#pedido-titulo").focus({ preventScroll: true });
+}
+fotoPedido.onerror = () => {
+  if (fotoPedido.getAttribute("src") !== "assets/reserva.svg") fotoPedido.src = "assets/reserva.svg";
+};
+document.querySelector("#pedir").onclick = () => abrirPedido(active);
+formulario.addEventListener("input", atualizarMensagem);
+
 function mostrarFoto(i) {
   const item = apresentacoes[i];
   let caminho = item.foto;
@@ -66,10 +91,8 @@ function mostrarFoto(i) {
     if (!item.semRotulo) proximaGenerica = (proximaGenerica + 1) % fotosGenericas.length;
   }
   const photo = slides[i].querySelector("img");
-  slides[i].dataset.foto = "sim";
   photo.alt = semRotulo.checked ? "Garrafa de açaí PuraPolpa sem rótulo" : "Garrafa de açaí PuraPolpa de " + item.volume;
   photo.src = urlFoto(caminho);
-  atualizarLegenda();
 }
 semRotulo.onchange = () => {
   mostrarFoto(active);
@@ -78,7 +101,7 @@ semRotulo.onchange = () => {
 
 function agendar() {
   clearTimeout(timer);
-  if (!paused && !reduced.matches && !document.hidden) {
+  if (!paused && !reduced.matches && !document.hidden && !stage.contains(document.activeElement)) {
     timer = setTimeout(() => selecionar((active + 1) % slides.length), 3000);
   }
 }
@@ -98,7 +121,6 @@ function selecionar(next) {
     slide.hidden = i !== next;
     volumes.children[i].setAttribute("aria-pressed", String(i === next));
   });
-  atualizarLegenda();
   if (reduced.matches) { agendar(); return; }
   anterior.hidden = false;
   const saida = anterior.animate([{ transform: "translateX(0)" }, { transform: "translateX(105%)" }], { duration: 600, easing: "ease-in" });
@@ -121,5 +143,6 @@ reduced.addEventListener("change", () => {
   atualizarControle();
 });
 document.addEventListener("visibilitychange", agendar);
-atualizarLegenda();
+stage.addEventListener("focusin", agendar);
+stage.addEventListener("focusout", () => queueMicrotask(agendar));
 atualizarControle();

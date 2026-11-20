@@ -9,8 +9,8 @@
     />
     <title>PuraPolpa — Açaí em garrafa</title>
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css" />
-    <script defer src="garrafas.js?v=e0339faa"></script>
+    <link rel="stylesheet" href="estilo.css?v=pedido2" />
+    <script defer src="garrafas.js?v=pedido2"></script>
   </head>
   <body>
     <header class="wrap">
@@ -32,17 +32,41 @@
             aquela vontade de tomar um açaí. Escolha sua garrafa e leve esse
             momento com você.
           </p>
-          <a class="storylink" href="#historia">Conheça a história</a>
+          <a class="storylink" id="pedir" href="#pedido">Peça já o seu e personalize</a>
+          <a class="history-link" href="#historia">Conheça a história</a>
         </div>
         <div class="showcase" aria-label="Apresentações da PuraPolpa">
           <div class="stage" id="stage"><span class="halo"></span></div>
+          <p class="caption">Imagens ilustrativas. Todas as garrafas vêm com rótulo.</p>
           <div class="controls">
             <div id="volumes" role="group" aria-label="Escolher volume"></div>
             <button id="motion" type="button" aria-label="Pausar animação">
               <span aria-hidden="true"></span>
             </button>
           </div>
-          <label class="label-choice"><input type="checkbox" id="sem-rotulo"> Sem rótulo</label>
+          <label class="label-choice"><input type="checkbox" id="sem-rotulo"> Ver foto sem rótulo</label>
+        </div>
+      </section>
+      <section id="pedido" class="wrap pedido" aria-labelledby="pedido-titulo" hidden>
+        <figure>
+          <img id="pedido-foto" alt="">
+          <figcaption class="caption">Imagem ilustrativa. Sua garrafa vem com rótulo.</figcaption>
+        </figure>
+        <div>
+          <p class="kicker">Seu pedido</p>
+          <h2 id="pedido-titulo" tabindex="-1">Açaí de <span id="pedido-volume"></span></h2>
+          <form id="personalizar">
+            <fieldset>
+              <legend>Escolha os acompanhamentos</legend>
+              <label><input type="checkbox" name="acompanhamento" value="Musse de maracujá" checked> Musse de maracujá</label>
+              <label><input type="checkbox" name="acompanhamento" value="Leite em pó" checked> Leite em pó</label>
+              <label><input type="checkbox" name="acompanhamento" value="Leite condensado" checked> Leite condensado</label>
+            </fieldset>
+            <label for="observacoes">Observações <small>(opcional)</small></label>
+            <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
+            <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Continuar no WhatsApp</a>
+            <a class="history-link" href="#garrafas">Escolher outra garrafa</a>
+          </form>
         </div>
       </section>
       <section id="historia" aria-labelledby="hist-title">
@@ -72,6 +96,7 @@
       <div class="footer-brand">
         <span class="brand">PuraPolpa</span>
         <em>Sabor que marca!</em>
+        <a href="admin.html">Área administrativa</a>
       </div>
       <address class="footer-contact">
         <a href="https://wa.link/3lx6vb" target="_blank" rel="noopener noreferrer">

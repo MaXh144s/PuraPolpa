@@ -1,2 +1,14 @@
 /polpapura-release.zip
 /PuraPolpa - favicon.png
+
+# Configuração local de deploy e variáveis de ambiente
+.vercel/
+.env
+.env.*
+!.env.example
+
+# Dependências e arquivos locais de ferramentas
+node_modules/
+npm-debug.log*
+.DS_Store
+Thumbs.db

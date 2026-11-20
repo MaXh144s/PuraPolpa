@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": "polpapura/dist",
+  "headers": [
+    {
+      "source": "/garrafas/:arquivo*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, no-cache" }
+      ]
+    }
+  ]
+}

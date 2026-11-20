@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Custos de produção · PuraPolpa</title>
+<link rel="icon" href="icones/favicon.png"><link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="admin.css">
+<script defer src="cofre.js"></script><script defer src="admin.js?v=composicao3"></script>
+</head><body>
+<header class="wrap"><a class="brand" href="index.html">PuraPolpa</a><nav><a href="index.html">Voltar à vitrine</a><button id="sair" hidden>Sair</button></nav></header>
+<main class="wrap admin">
+<section id="acesso" class="acesso"><p class="kicker">Área administrativa</p><h1 id="titulo-acesso">Acesso local</h1>
+<p id="instrucao">Carregando o acesso deste navegador…</p>
+<form id="login"><label>Usuário<input id="usuario" required autocomplete="username"></label>
+<label>Senha<input id="senha" type="password" required autocomplete="current-password"></label>
+<button class="principal" id="entrar" disabled>Entrar</button></form>
+<p class="nota">Os dados ficam neste navegador. Limpar os dados do site remove o cadastro e o catálogo.</p></section>
+<section id="painel" hidden><p class="kicker">Área administrativa</p><h1>Custos de produção</h1>
+<div class="colunas"><section class="catalogo"><h2>Catálogo</h2>
+<label>Buscar no catálogo<input type="search" id="busca" placeholder="Nome da receita ou do produto"></label>
+<ul id="lista"></ul></section>
+<section class="editor"><div class="linha"><h2 id="titulo-editor">Novo item</h2><button id="novo" type="button">Novo item</button></div>
+<form id="item"><label>Tipo<select id="tipo"><option value="produto">Unidade de produto</option><option value="receita">Receita composta</option></select></label>
+<label>Nome<input id="nome" required placeholder="Ex.: leite condensado"></label>
+<label id="opcao-composicao" hidden><input id="automatico" type="checkbox"> Calcular pelos produtos do catálogo</label>
+<fieldset id="composicao" hidden><legend>Produtos da receita</legend>
+<div id="ingredientes"></div>
+<button type="button" id="adicionar">Adicionar produto</button>
+<p id="sem-produtos" hidden>Cadastre uma unidade de produto para usar na receita.</p>
+</fieldset>
+<div id="totais-manuais">
+<label>Peso total (g)<input id="peso" required inputmode="decimal" placeholder="Ex.: 395"></label>
+<label><span id="rotulo-preco">Preço total (R$)</span><input id="preco" required inputmode="decimal" placeholder="Ex.: 5,19"></label>
+</div>
+<label>Quantidade usada (g), opcional<input id="uso" inputmode="decimal" placeholder="Ex.: 40"></label>
+<div class="resumo" aria-live="polite"><span id="legenda-total">Custo total</span><strong id="total">—</strong><span id="detalhe"></span></div>
+<button class="principal" id="salvar">Cadastrar item</button></form></section></div></section>
+<p id="aviso" role="status"></p></main></body></html>

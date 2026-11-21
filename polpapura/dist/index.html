@@ -19,8 +19,8 @@
     <meta name="twitter:card" content="summary" />
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css?v=pedido2" />
-    <script defer src="garrafas.js?v=pedido3"></script>
+    <link rel="stylesheet" href="estilo.css?v=pedido4" />
+    <script defer src="garrafas.js?v=pedido4"></script>
   </head>
   <body>
     <header class="wrap">
@@ -69,6 +69,7 @@
             <fieldset>
               <legend>Volume por garrafa</legend>
               <div class="opcoes-pedido" id="volumes-pedido"></div>
+              <p class="preco-garrafa" aria-live="polite">Preço por garrafa: <strong id="preco-unitario"></strong></p>
             </fieldset>
             <fieldset>
               <legend>Quantidade de garrafas</legend>
@@ -79,15 +80,16 @@
               </div>
             </fieldset>
             <fieldset>
-              <legend>Escolha os acompanhamentos</legend>
+              <legend>Escolha os condimentos</legend>
               <label><input type="checkbox" name="acompanhamento" value="Musse de maracujá" checked> Musse de maracujá</label>
               <label><input type="checkbox" name="acompanhamento" value="Leite em pó" checked> Leite em pó</label>
               <label><input type="checkbox" name="acompanhamento" value="Leite condensado" checked> Leite condensado</label>
             </fieldset>
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
+            <button class="cupom" type="button" disabled>Aplicar cupom (em breve)</button>
             <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
-            <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Continuar no WhatsApp</a>
+            <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Finalizar pedido no WhatsApp</a>
           </form>
         </div>
       </section>

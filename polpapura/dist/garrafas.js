@@ -77,7 +77,7 @@ const volumesPedido = document.querySelector("#volumes-pedido");
 for (const [i, item] of apresentacoes.entries()) {
   const botao = document.createElement("button");
   botao.type = "button";
-  botao.textContent = item.volume + " por " + moeda.format(item.centavos / 100);
+  botao.textContent = item.volume;
   botao.onclick = () => escolherVolume(i, fotoApresentacao(i));
   volumesPedido.append(botao);
 }
@@ -99,7 +99,7 @@ function atualizarMensagem() {
   const mensagem = [
     "Olá, PuraPolpa! Gostaria de pedir " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") + " de açaí de " + itemPedido.volume + ".",
     "Total das garrafas: " + total + ".",
-    acompanhamentos.length ? "Acompanhamentos: " + acompanhamentos.join(", ") + "." : "Sem acompanhamentos.",
+    acompanhamentos.length ? "Condimentos: " + acompanhamentos.join(", ") + "." : "Sem condimentos.",
   ];
   if (notas) mensagem.push("Observações: " + notas);
   const destino = new URL("https://wa.me/5551985870775");
@@ -111,6 +111,7 @@ function escolherVolume(i, imagem) {
   itemPedido = apresentacoes[i];
   carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
   document.querySelector("#pedido-volume").textContent = itemPedido.volume;
+  document.querySelector("#preco-unitario").textContent = moeda.format(itemPedido.centavos / 100);
   Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
   atualizarMensagem();
 }

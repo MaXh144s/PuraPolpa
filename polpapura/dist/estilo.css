@@ -377,6 +377,9 @@ footer em {
 .pedido h2 { margin: .5rem 0 1rem; font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.08; }
 .pedido fieldset { border: 0; padding: 0; margin: 0 0 1rem; }
 .pedido legend, .pedido label[for] { font-weight: 700; }
+.preco-garrafa { margin: .75rem 0 0; color: #276345; }
+.preco-garrafa strong { font-size: 1.25rem; }
+.pedido .cupom { margin-top: .75rem; padding: .5rem .8rem; border: 1px dashed #ab95a7; border-radius: .6rem; color: #655864; background: transparent; cursor: default; }
 .opcoes-pedido { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .45rem; }
 .opcoes-pedido button { min-height: 44px; padding: .45rem .8rem; border: 1px solid #bfadbc; border-radius: 2rem; color: var(--purple); background: transparent; }
 .opcoes-pedido [aria-pressed="true"] { background: var(--purple); border-color: var(--purple); color: white; }

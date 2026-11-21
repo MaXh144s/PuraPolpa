@@ -22,11 +22,12 @@ function urlFoto(arquivo) {
   return pastaGarrafas + arquivo;
 }
 const apresentacoes = [
-  { volume: "250 ml", foto: "garrafa-250.png", altura: "84%" },
-  { volume: "300 ml", foto: "garrafa-300.png", altura: "88%" },
-  { volume: "500 ml", foto: "garrafa-500.png", altura: "93%" },
-  { volume: "900 ml", foto: "garrafa-900.png", semRotulo: "garrafa-900-sem-rotulo.png", altura: "99%" }
+  { volume: "250 ml", centavos: 1290, foto: "garrafa-250.png", altura: "84%" },
+  { volume: "300 ml", centavos: 1490, foto: "garrafa-300.png", altura: "88%" },
+  { volume: "500 ml", centavos: 1990, foto: "garrafa-500.png", altura: "93%" },
+  { volume: "900 ml", centavos: 2990, foto: "garrafa-900.png", semRotulo: "garrafa-900-sem-rotulo.png", altura: "99%" }
 ];
+const moeda = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 const fotosGenericas = ["sem-rotulo-a.png", "sem-rotulo-b.png"];
 const semRotulo = document.querySelector("#sem-rotulo");
@@ -70,13 +71,13 @@ const slides = apresentacoes.map(({ volume, foto, altura }, i) => {
 const pedido = document.querySelector("#pedido");
 const formulario = document.querySelector("#personalizar");
 const fotoPedido = document.querySelector("#pedido-foto");
-let volumePedido;
+let itemPedido = apresentacoes[0];
 let quantidade = 1;
 const volumesPedido = document.querySelector("#volumes-pedido");
 for (const [i, item] of apresentacoes.entries()) {
   const botao = document.createElement("button");
   botao.type = "button";
-  botao.textContent = item.volume;
+  botao.textContent = item.volume + " por " + moeda.format(item.centavos / 100);
   botao.onclick = () => escolherVolume(i, fotoApresentacao(i));
   volumesPedido.append(botao);
 }
@@ -91,10 +92,13 @@ document.querySelector("#diminuir").onclick = () => mudarQuantidade(-1);
 document.querySelector("#aumentar").onclick = () => mudarQuantidade(1);
 
 function atualizarMensagem() {
+  const total = moeda.format(quantidade * itemPedido.centavos / 100);
+  document.querySelector("#pedido-total").textContent = total;
   const acompanhamentos = new FormData(formulario).getAll("acompanhamento");
   const notas = document.querySelector("#observacoes").value.trim();
   const mensagem = [
-    "Olá, PuraPolpa! Gostaria de pedir " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") + " de açaí de " + volumePedido + ".",
+    "Olá, PuraPolpa! Gostaria de pedir " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") + " de açaí de " + itemPedido.volume + ".",
+    "Total das garrafas: " + total + ".",
     acompanhamentos.length ? "Acompanhamentos: " + acompanhamentos.join(", ") + "." : "Sem acompanhamentos.",
   ];
   if (notas) mensagem.push("Observações: " + notas);
@@ -104,9 +108,9 @@ function atualizarMensagem() {
 }
 
 function escolherVolume(i, imagem) {
-  volumePedido = apresentacoes[i].volume;
+  itemPedido = apresentacoes[i];
   carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
-  document.querySelector("#pedido-volume").textContent = volumePedido;
+  document.querySelector("#pedido-volume").textContent = itemPedido.volume;
   Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
   atualizarMensagem();
 }

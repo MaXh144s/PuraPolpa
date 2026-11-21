@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 11,90."
+      content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 12,90."
     />
     <title>PuraPolpa — Açaí em garrafa</title>
     <meta property="og:type" content="website" />
     <meta property="og:title" content="PuraPolpa — Açaí em garrafa" />
-    <meta property="og:description" content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 11,90." />
+    <meta property="og:description" content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 12,90." />
     <meta property="og:url" content="https://purapolpaacai.vercel.app/" />
     <meta property="og:image" content="https://purapolpaacai.vercel.app/assets/compartilhar-300ml.jpg" />
     <meta property="og:image:width" content="1254" />
@@ -20,7 +20,7 @@
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
     <link rel="stylesheet" href="estilo.css?v=pedido2" />
-    <script defer src="garrafas.js?v=pedido2"></script>
+    <script defer src="garrafas.js?v=pedido3"></script>
   </head>
   <body>
     <header class="wrap">
@@ -86,6 +86,7 @@
             </fieldset>
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
+            <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
             <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Continuar no WhatsApp</a>
           </form>
         </div>

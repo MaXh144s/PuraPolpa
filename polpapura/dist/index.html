@@ -19,8 +19,10 @@
     <meta name="twitter:card" content="summary" />
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css?v=pedido4" />
-    <script defer src="garrafas.js?v=pedido4"></script>
+    <link rel="stylesheet" href="estilo.css?v=carrinho1" />
+    <script defer src="garrafas.js?v=carrinho1"></script>
+    <script defer src="resumo-pedido.js"></script>
+    <script defer src="carrinho.js"></script>
   </head>
   <body>
     <header class="wrap">
@@ -30,6 +32,7 @@
       <nav aria-label="Principal">
         <a href="#garrafas">As garrafas</a
         ><a href="#historia">Nossa história</a>
+        <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho vazio"><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem">0</span></a>
       </nav>
     </header>
     <main>
@@ -87,10 +90,34 @@
             </fieldset>
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
-            <button class="cupom" type="button" disabled>Aplicar cupom (em breve)</button>
             <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
-            <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Finalizar pedido no WhatsApp</a>
+            <button class="storylink" type="submit">Adicionar ao carrinho</button>
           </form>
+        </div>
+      </section>
+      <section id="carrinho" class="wrap compras" aria-labelledby="titulo-carrinho">
+        <h2 id="titulo-carrinho" tabindex="-1">Seu carrinho</h2>
+        <p id="vazio">O carrinho está vazio.</p>
+        <ul id="itens-carrinho"></ul>
+        <a href="#garrafas" class="history-link">Escolher mais garrafas</a>
+        <form id="checkout" hidden>
+          <fieldset id="dados-pedido">
+            <legend>Finalizar pedido</legend>
+            <label>Nome do cliente<input name="cliente" autocomplete="name" maxlength="100" required></label>
+            <label>Modalidade<select name="modalidade"><option>Entrega</option><option>Retirada</option></select></label>
+            <label id="campo-endereco">Endereço de entrega, com número e bairro<input name="endereco" autocomplete="street-address" maxlength="300" required></label>
+            <label>Forma de pagamento<select name="pagamento" required><option value="">Selecione</option><option>Pix</option><option>Crédito</option><option>Débito</option><option>Dinheiro</option></select></label>
+            <button class="cupom" type="button" disabled>Aplicar cupom (em breve)</button>
+            <p>Subtotal das garrafas: <strong id="subtotal"></strong></p>
+            <p id="frete"></p>
+            <button class="storylink" type="submit" id="finalizar">Registrar pedido</button>
+          </fieldset>
+        </form>
+        <p id="aviso-compra" role="status"></p>
+        <a id="ajuda-pedido" class="history-link" target="_blank" rel="noopener noreferrer" hidden>Conferir pedido com o atendente</a>
+        <div id="comprovante" hidden>
+          <pre class="resumo-pedido" id="texto-comprovante"></pre>
+          <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Enviar pedido no WhatsApp</a>
         </div>
       </section>
       <section id="historia" aria-labelledby="hist-title">

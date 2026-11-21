@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { abrirPedidos } from "./admin-pedidos.js";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth:{detectSessionInUrl:false}
@@ -29,6 +30,7 @@ window.catalogoOnline = {
 };
 
 function telaLogin() {
+  document.getElementById("pedidos-admin")?.remove();
   itens = [];
   revisao = undefined;
   el("lista").replaceChildren();
@@ -42,6 +44,7 @@ async function abrirPainel() {
   itens = await consultar("pp_catalogo");
   el("acesso").hidden = true;
   el("sair").hidden = el("painel").hidden = false;
+  abrirPedidos(supabase);
   editar();
   listar();
   try { el("migracao").hidden = !await lerCofre(); }

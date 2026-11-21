@@ -45,5 +45,8 @@ for (const arquivo of await readdir(path.join(origem, "garrafas"))) {
 const primeira = fotos["garrafa-250.png"];
 const preload = primeira ? '<link rel="preload" as="image" type="image/webp" imagesrcset="' + primeira.srcset + '" imagesizes="' + primeira.sizes + '">' : "";
 const html = await readFile(path.join(origem, "index.html"), "utf8");
-await writeFile(path.join(destino, "index.html"), html.replace("<!-- fotos responsivas -->",
+const configPedidos = url && key
+  ? '<meta name="pedidos-api" content="' + new URL(url).origin + '" data-chave="' + key + '">'
+  : "";
+await writeFile(path.join(destino, "index.html"), html.replace("<!-- fotos responsivas -->", configPedidos +
   preload + '<script id="fotos-responsivas" type="application/json">' + JSON.stringify(fotos).replaceAll("<", "\\u003c") + '</script>'));

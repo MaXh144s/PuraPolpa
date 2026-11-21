@@ -83,28 +83,18 @@ for (const [i, item] of apresentacoes.entries()) {
 }
 
 function mudarQuantidade(delta) {
-  quantidade = Math.max(1, quantidade + delta);
+  quantidade = Math.min(99, Math.max(1, quantidade + delta));
   document.querySelector("#quantidade").value = String(quantidade);
   document.querySelector("#diminuir").disabled = quantidade === 1;
-  atualizarMensagem();
+  document.querySelector("#aumentar").disabled = quantidade === 99;
+  atualizarTotal();
 }
 document.querySelector("#diminuir").onclick = () => mudarQuantidade(-1);
 document.querySelector("#aumentar").onclick = () => mudarQuantidade(1);
 
-function atualizarMensagem() {
+function atualizarTotal() {
   const total = moeda.format(quantidade * itemPedido.centavos / 100);
   document.querySelector("#pedido-total").textContent = total;
-  const acompanhamentos = new FormData(formulario).getAll("acompanhamento");
-  const notas = document.querySelector("#observacoes").value.trim();
-  const mensagem = [
-    "Olá, PuraPolpa! Gostaria de pedir " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") + " de açaí de " + itemPedido.volume + ".",
-    "Total das garrafas: " + total + ".",
-    acompanhamentos.length ? "Condimentos: " + acompanhamentos.join(", ") + "." : "Sem condimentos.",
-  ];
-  if (notas) mensagem.push("Observações: " + notas);
-  const destino = new URL("https://wa.me/5551985870775");
-  destino.searchParams.set("text", mensagem.join("\n"));
-  document.querySelector("#enviar-pedido").href = destino.href;
 }
 
 function escolherVolume(i, imagem) {
@@ -113,7 +103,7 @@ function escolherVolume(i, imagem) {
   document.querySelector("#pedido-volume").textContent = itemPedido.volume;
   document.querySelector("#preco-unitario").textContent = moeda.format(itemPedido.centavos / 100);
   Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
-  atualizarMensagem();
+  atualizarTotal();
 }
 function abrirPedido(i) {
   const foto = slides[i].querySelector("img");
@@ -123,7 +113,6 @@ function abrirPedido(i) {
 }
 fotoPedido.onerror = recuperarFoto;
 document.querySelector("#pedir").onclick = () => abrirPedido(active);
-formulario.addEventListener("input", atualizarMensagem);
 
 function fotoApresentacao(i) {
   const item = apresentacoes[i];

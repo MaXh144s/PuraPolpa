@@ -380,6 +380,21 @@ footer em {
 .preco-garrafa { margin: .75rem 0 0; color: #276345; }
 .preco-garrafa strong { font-size: 1.25rem; }
 .pedido .cupom { margin-top: .75rem; padding: .5rem .8rem; border: 1px dashed #ab95a7; border-radius: .6rem; color: #655864; background: transparent; cursor: default; }
+.atalho-carrinho { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; }
+header nav { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.compras { padding-block: 2.5rem; border-top: 1px solid #ddcfd9; }
+.compras h2 { font-size: clamp(2.3rem, 5vw, 3.8rem); }
+.compras ul { padding: 0; list-style: none; max-width: 42rem; }
+.compras li { border-bottom: 1px solid #ddcfd9; padding-block: .7rem; overflow-wrap: anywhere; }
+.compras li button { border: 0; background: transparent; text-decoration: underline; padding: .4rem 0; }
+.compras fieldset { display: grid; gap: .8rem; max-width: 32rem; margin: 1.5rem 0; border: 0; padding: 0; }
+.compras legend { font: 2rem Display, Georgia, serif; margin-bottom: .8rem; }
+.compras label { display: grid; gap: .4rem; }
+.compras input, .compras select { width: 100%; padding: .7rem; font: inherit; border: 1px solid #ab95a7; border-radius: .5rem; }
+.compras [hidden] { display: none; }
+.compras .cupom { justify-self: start; padding: .45rem .75rem; }
+button.storylink { border: 0; justify-self: start; }
+.resumo-pedido { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.5; }
 .opcoes-pedido { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .45rem; }
 .opcoes-pedido button { min-height: 44px; padding: .45rem .8rem; border: 1px solid #bfadbc; border-radius: 2rem; color: var(--purple); background: transparent; }
 .opcoes-pedido [aria-pressed="true"] { background: var(--purple); border-color: var(--purple); color: white; }

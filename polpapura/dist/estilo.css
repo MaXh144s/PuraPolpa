@@ -400,6 +400,7 @@ button.storylink { border: 0; justify-self: start; }
 .acoes-carrinho { display: flex; align-items: stretch; gap: .5rem; margin-top: 1rem; }
 .acoes-carrinho .storylink { display: inline-grid; place-items: center; margin: 0; padding: .65rem .9rem; text-align: center; }
 .acoes-carrinho a.storylink { border: 1px solid var(--purple); color: var(--purple); background: transparent; }
+a[href="#carrinho"][hidden] { display: none; }
 .resumo-pedido { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.5; }
 .opcoes-pedido { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .45rem; }
 .opcoes-pedido button { min-height: 44px; padding: .45rem .8rem; border: 1px solid #bfadbc; border-radius: 2rem; color: var(--purple); background: transparent; }

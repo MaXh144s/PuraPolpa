@@ -19,10 +19,10 @@
     <meta name="twitter:card" content="summary" />
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css?v=acoes1" />
+    <link rel="stylesheet" href="estilo.css?v=acoes2" />
     <script defer src="garrafas.js?v=carrinho1"></script>
     <script defer src="resumo-pedido.js?v=whats1"></script>
-    <script defer src="carrinho.js?v=menu1"></script>
+    <script defer src="carrinho.js?v=acoes2"></script>
   </head>
   <body>
     <header class="menu-principal"><div class="wrap">
@@ -32,7 +32,7 @@
       <nav aria-label="Principal">
         <a href="#garrafas">As garrafas</a
         ><a href="#historia">Nossa história</a>
-        <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho vazio"><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem" aria-hidden="true" hidden></span></a>
+        <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho" hidden><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem" aria-hidden="true"></span></a>
       </nav>
     </div></header>
     <main>
@@ -93,17 +93,16 @@
             <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
             <div class="acoes-carrinho">
               <button class="storylink" type="submit">Adicionar ao carrinho</button>
-              <a class="storylink" href="#carrinho">Ir para o carrinho</a>
+              <a class="storylink" href="#carrinho" hidden>Ir para o carrinho</a>
             </div>
           </form>
         </div>
       </section>
-      <section id="carrinho" class="wrap compras" aria-labelledby="titulo-carrinho">
+      <section id="carrinho" class="wrap compras" aria-labelledby="titulo-carrinho" hidden>
         <h2 id="titulo-carrinho" tabindex="-1">Seu carrinho</h2>
-        <p id="vazio">O carrinho está vazio.</p>
         <ul id="itens-carrinho"></ul>
         <a href="#garrafas" class="history-link">Escolher mais garrafas</a>
-        <form id="checkout" hidden>
+        <form id="checkout">
           <fieldset id="dados-pedido">
             <legend>Finalizar pedido</legend>
             <label>Nome do cliente<input name="cliente" autocomplete="name" maxlength="100" required></label>
@@ -117,11 +116,11 @@
           </fieldset>
         </form>
         <p id="aviso-compra" role="status"></p>
-        <div id="comprovante" hidden>
+      </section>
+      <div id="comprovante" class="wrap" hidden>
           <pre class="resumo-pedido" id="texto-comprovante"></pre>
           <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Enviar pedido no WhatsApp</a>
-        </div>
-      </section>
+      </div>
       <section id="historia" aria-labelledby="hist-title">
         <div class="story wrap">
           <div>

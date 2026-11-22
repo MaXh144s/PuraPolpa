@@ -62,12 +62,13 @@
     const quantidade = estado.itens.reduce((soma, item) => soma + item.quantidade, 0);
     const valor = dinheiro(subtotal());
     porId("contagem").textContent = String(quantidade);
-    porId("contagem").hidden = quantidade === 0;
+    for (const atalho of document.querySelectorAll('a[href="#carrinho"]')) {
+      atalho.hidden = quantidade === 0;
+    }
     document.querySelector(".atalho-carrinho").setAttribute("aria-label",
       quantidade ? "Ver carrinho com " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") : "Ver carrinho vazio");
     porId("subtotal").textContent = valor;
-    porId("vazio").hidden = quantidade > 0 || Boolean(estado.registro);
-    checkout.hidden = quantidade === 0;
+    porId("carrinho").hidden = quantidade === 0;
     atualizarFrete();
   }
 

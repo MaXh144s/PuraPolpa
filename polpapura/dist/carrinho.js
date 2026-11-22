@@ -112,6 +112,8 @@
       avisar("Preencha o nome e, para entrega, o endereço.");
       return;
     }
+    const abaWhatsApp = window.open("about:blank", "_blank");
+    if (abaWhatsApp) abaWhatsApp.opener = null;
     const pedido = { ...dados, itens: estado.itens };
     const assinatura = JSON.stringify(pedido);
     estado.dados = dados;
@@ -145,7 +147,14 @@
     }
     registrando = porId("dados-pedido").disabled = false;
     mostrarComprovante(resumo);
-    location.assign(porId("enviar-pedido").href);
+    const linkWhatsApp = porId("enviar-pedido");
+    if (abaWhatsApp && !abaWhatsApp.closed) {
+      abaWhatsApp.location.replace(linkWhatsApp.href);
+      avisar("");
+    } else {
+      avisar("Use o botão abaixo para abrir o WhatsApp.");
+      linkWhatsApp.focus();
+    }
   };
   renderizar();
   if (estado.registro) mostrarComprovante(estado.registro);

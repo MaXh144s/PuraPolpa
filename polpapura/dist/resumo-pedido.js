@@ -14,7 +14,7 @@ function agruparItens(itens) {
 }
 
 function descricaoItem(item, preco) {
-  return item.quantidade + " × Açaí de " + item.volume + " · " + preco + " cada";
+  return item.quantidade + " × Garrafa de " + item.volume + " · " + preco + " cada";
 }
 
 globalThis.resumoPedido = function (pedido) {

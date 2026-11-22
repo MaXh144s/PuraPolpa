@@ -39,10 +39,10 @@
   function renderizar() {
     const lista = porId("itens-carrinho");
     lista.replaceChildren();
-    estado.itens.forEach((item, indice) => {
+    agruparItens(estado.itens).forEach((item, indice) => {
       const linha = document.createElement("li");
       const titulo = document.createElement("strong");
-      titulo.textContent = item.quantidade + " × Açaí de " + item.volume + " · " + dinheiro(item.quantidade * catalogo.get(item.volume));
+      titulo.textContent = descricaoItem(item, dinheiro(catalogo.get(item.volume)));
       const detalhes = document.createElement("p");
       detalhes.textContent = [item.condimentos.join(", ") || "Sem condimentos", item.observacoes].filter(Boolean).join(" · ");
       const remover = document.createElement("button");
@@ -51,7 +51,8 @@
       remover.setAttribute("aria-label", "Remover item " + (indice + 1) + ", açaí de " + item.volume);
       remover.onclick = () => {
         if (registrando) return;
-        estado.itens.splice(indice, 1);
+        const chave = chaveItem(item);
+        estado.itens = estado.itens.filter(outro => chaveItem(outro) !== chave);
         salvar();
         renderizar();
         avisar("Item removido.");
@@ -78,10 +79,13 @@
     const item = { volume: itemPedido.volume, quantidade,
       condimentos: new FormData(formulario).getAll("acompanhamento"),
       observacoes: porId("observacoes").value.trim() };
-    if (estado.itens.length >= 30 || quantidade > 99) {
+    const chave = chaveItem(item);
+    const existente = estado.itens.find(outro => chaveItem(outro) === chave && outro.quantidade + quantidade <= 99);
+    if ((!existente && estado.itens.length >= 30) || quantidade > 99) {
       avisar("Use até 30 itens no carrinho e até 99 garrafas por item.");
     } else {
-      estado.itens.push(item);
+      if (existente) existente.quantidade += quantidade;
+      else estado.itens.push(item);
       delete estado.registro;
       porId("comprovante").hidden = true;
       salvar();

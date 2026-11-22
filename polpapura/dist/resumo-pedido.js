@@ -1,3 +1,22 @@
+function chaveItem(item) {
+  return JSON.stringify([item.volume, [...item.condimentos].sort(), item.observacoes, item.centavos]);
+}
+
+function agruparItens(itens) {
+  const grupos = new Map();
+  for (const item of itens) {
+    const chave = chaveItem(item);
+    const grupo = grupos.get(chave);
+    if (grupo) grupo.quantidade += item.quantidade;
+    else grupos.set(chave, { ...item });
+  }
+  return [...grupos.values()];
+}
+
+function descricaoItem(item, preco) {
+  return item.quantidade + " × Açaí de " + item.volume + " · " + preco + " cada";
+}
+
 globalThis.resumoPedido = function (pedido) {
   const real = centavos => (centavos / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const linhas = [
@@ -7,8 +26,8 @@ globalThis.resumoPedido = function (pedido) {
   ];
   if (pedido.modalidade === "Entrega") linhas.push("Endereço: " + pedido.endereco);
   linhas.push("Pagamento: " + pedido.pagamento, "", "Itens:");
-  for (const item of pedido.itens) {
-    linhas.push(item.quantidade + " × Açaí de " + item.volume + " — " + real(item.quantidade * item.centavos));
+  for (const item of agruparItens(pedido.itens)) {
+    linhas.push(descricaoItem(item, real(item.centavos)));
     linhas.push(item.condimentos.length ? item.condimentos.join(", ") : "Sem condimentos");
     if (item.observacoes) linhas.push("Observação: " + item.observacoes);
   }

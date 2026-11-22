@@ -19,7 +19,7 @@
     <meta name="twitter:card" content="summary" />
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css?v=menu1" />
+    <link rel="stylesheet" href="estilo.css?v=acoes1" />
     <script defer src="garrafas.js?v=carrinho1"></script>
     <script defer src="resumo-pedido.js?v=whats1"></script>
     <script defer src="carrinho.js?v=menu1"></script>
@@ -91,7 +91,10 @@
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
             <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
-            <button class="storylink" type="submit">Adicionar ao carrinho</button>
+            <div class="acoes-carrinho">
+              <button class="storylink" type="submit">Adicionar ao carrinho</button>
+              <a class="storylink" href="#carrinho">Ir para o carrinho</a>
+            </div>
           </form>
         </div>
       </section>

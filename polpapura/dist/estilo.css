@@ -380,7 +380,10 @@ footer em {
 .preco-garrafa { margin: .75rem 0 0; color: #276345; }
 .preco-garrafa strong { font-size: 1.25rem; }
 .pedido .cupom { margin-top: .75rem; padding: .5rem .8rem; border: 1px dashed #ab95a7; border-radius: .6rem; color: #655864; background: transparent; cursor: default; }
-.atalho-carrinho { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; }
+.menu-principal { position: sticky; top: 0; z-index: 10; background: var(--paper); }
+.menu-principal > .wrap { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.atalho-carrinho { position: relative; display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; }
+#contagem { position: absolute; top: 0; right: -4px; min-width: 1.25rem; padding: 0 .3rem; border-radius: 1rem; background: #b91c28; color: white; text-align: center; font: bold .75rem/1.25rem Leitura, Arial, sans-serif; }
 header nav { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .compras { padding-block: 2.5rem; border-top: 1px solid #ddcfd9; }
 .compras h2 { font-size: clamp(2.3rem, 5vw, 3.8rem); }

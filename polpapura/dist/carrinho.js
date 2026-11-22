@@ -2,6 +2,10 @@
   const porId = id => document.getElementById(id);
   const checkout = porId("checkout");
   const campos = checkout.elements;
+  const menu = document.querySelector(".menu-principal");
+  new ResizeObserver(() => {
+    document.documentElement.style.scrollPaddingTop = (menu.offsetHeight + 8) + "px";
+  }).observe(menu);
   const chave = "purapolpa.carrinho.v1";
   const catalogo = new Map(apresentacoes.map(item => [item.volume, item.centavos]));
   const dinheiro = centavos => moeda.format(centavos / 100);
@@ -57,8 +61,10 @@
     });
     const quantidade = estado.itens.reduce((soma, item) => soma + item.quantidade, 0);
     const valor = dinheiro(subtotal());
-    porId("contagem").textContent = quantidade ? quantidade + " · " + valor : "0";
-    document.querySelector(".atalho-carrinho").setAttribute("aria-label", "Ver carrinho, " + quantidade + " garrafas. Subtotal " + valor);
+    porId("contagem").textContent = String(quantidade);
+    porId("contagem").hidden = quantidade === 0;
+    document.querySelector(".atalho-carrinho").setAttribute("aria-label",
+      quantidade ? "Ver carrinho com " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") : "Ver carrinho vazio");
     porId("subtotal").textContent = valor;
     porId("vazio").hidden = quantidade > 0 || Boolean(estado.registro);
     checkout.hidden = quantidade === 0;

@@ -19,22 +19,22 @@
     <meta name="twitter:card" content="summary" />
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
-    <link rel="stylesheet" href="estilo.css?v=carrinho1" />
+    <link rel="stylesheet" href="estilo.css?v=menu1" />
     <script defer src="garrafas.js?v=carrinho1"></script>
     <script defer src="resumo-pedido.js?v=whats1"></script>
-    <script defer src="carrinho.js?v=whats1"></script>
+    <script defer src="carrinho.js?v=menu1"></script>
   </head>
   <body>
-    <header class="wrap">
+    <header class="menu-principal"><div class="wrap">
       <a class="brand" href="#garrafas" aria-label="PuraPolpa, início"
         ><span>PuraPolpa</span></a
       >
       <nav aria-label="Principal">
         <a href="#garrafas">As garrafas</a
         ><a href="#historia">Nossa história</a>
-        <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho vazio"><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem">0</span></a>
+        <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho vazio"><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem" aria-hidden="true" hidden></span></a>
       </nav>
-    </header>
+    </div></header>
     <main>
       <section class="hero wrap" id="garrafas" aria-labelledby="titulo">
         <div class="copy">

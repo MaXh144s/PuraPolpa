@@ -33,7 +33,6 @@
     porId("comprovante").hidden = false;
   }
   function renderizar() {
-    porId("ajuda-pedido").hidden = true;
     const lista = porId("itens-carrinho");
     lista.replaceChildren();
     estado.itens.forEach((item, indice) => {
@@ -89,7 +88,6 @@
     for (const [nome, valor] of Object.entries(estado.dados)) campos.namedItem(nome).value = valor;
   }
   checkout.oninput = () => {
-    porId("ajuda-pedido").hidden = true;
     atualizarFrete();
     estado.dados = Object.fromEntries(new FormData(checkout));
     salvar();
@@ -105,37 +103,38 @@
     }
     const pedido = { ...dados, itens: estado.itens };
     const assinatura = JSON.stringify(pedido);
-    if (estado.tentativa?.assinatura !== assinatura) estado.tentativa = { assinatura, id: crypto.randomUUID() };
     estado.dados = dados;
     salvar();
     registrando = porId("dados-pedido").disabled = true;
-    porId("ajuda-pedido").hidden = true;
-    avisar("Registrando pedido…");
-    try {
-      const config = document.querySelector('meta[name="pedidos-api"]');
-      if (!config) throw new Error();
-      const resposta = await fetch(config.content + "/rest/v1/rpc/pp_registrar_pedido", {
-        method: "POST", headers: { "Content-Type": "application/json", apikey: config.dataset.chave },
-        body: JSON.stringify({ tentativa_id: estado.tentativa.id, pedido }),
-        signal: AbortSignal.timeout(20000)
-      });
-      if (!resposta.ok) throw new Error();
-      const registro = await resposta.json();
-      mostrarComprovante(registro);
-      estado = { itens: [], registro };
-      salvar();
-      checkout.reset();
-      renderizar();
-      avisar("Pedido #" + registro.codigo + " registrado. Envie o resumo ao atendente pelo WhatsApp.");
-    } catch {
-      avisar("Não foi possível confirmar o registro. Seu carrinho foi mantido. Tente novamente.");
-      const resumo = resumoPedido({ ...pedido, subtotal: subtotal(),
-        itens: pedido.itens.map(item => ({ ...item, centavos: catalogo.get(item.volume) })) });
-      porId("ajuda-pedido").href = "https://wa.me/5551985870775?text=" + encodeURIComponent(resumo);
-      porId("ajuda-pedido").hidden = false;
-    } finally {
-      registrando = porId("dados-pedido").disabled = false;
+    avisar("Abrindo o WhatsApp…");
+    let resumo = { ...pedido, subtotal: subtotal(),
+      itens: pedido.itens.map(item => ({ ...item, centavos: catalogo.get(item.volume) })) };
+    const config = document.querySelector('meta[name="pedidos-api"]');
+    if (config) {
+      try {
+        if (estado.tentativa?.assinatura !== assinatura) {
+          estado.tentativa = { assinatura, id: crypto.randomUUID() };
+          salvar();
+        }
+        const resposta = await fetch(config.content + "/rest/v1/rpc/pp_registrar_pedido", {
+          method: "POST", headers: { "Content-Type": "application/json", apikey: config.dataset.chave },
+          body: JSON.stringify({ tentativa_id: estado.tentativa.id, pedido }),
+          signal: AbortSignal.timeout(2500)
+        });
+        if (!resposta.ok) throw new Error();
+        const registro = await resposta.json();
+        resumo = registro;
+        estado = { itens: [], registro };
+        salvar();
+        checkout.reset();
+        renderizar();
+      } catch {
+        // O atendente também recebe o resumo quando o registro online está indisponível.
+      }
     }
+    registrando = porId("dados-pedido").disabled = false;
+    mostrarComprovante(resumo);
+    location.assign(porId("enviar-pedido").href);
   };
   renderizar();
   if (estado.registro) mostrarComprovante(estado.registro);

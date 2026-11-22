@@ -1,7 +1,7 @@
 globalThis.resumoPedido = function (pedido) {
   const real = centavos => (centavos / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const linhas = [
-    pedido.codigo ? "Pedido #" + pedido.codigo : "Olá! Poderia verificar o registro deste pedido?",
+    pedido.codigo ? "Pedido #" + pedido.codigo : "Olá, PuraPolpa! Gostaria de fazer este pedido.",
     "Cliente: " + pedido.cliente,
     "Modalidade: " + pedido.modalidade,
   ];

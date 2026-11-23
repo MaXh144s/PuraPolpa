@@ -152,6 +152,13 @@ el("busca").oninput = listar;
 
 let catalogoPlanilha;
 const extrasPlanilha = new Set();
+function exibirGrupo(controle, aberto) {
+  el(controle.getAttribute("aria-controls")).hidden = !aberto;
+  controle.setAttribute("aria-expanded", String(aberto));
+}
+for (const controle of el("planilha").querySelectorAll(".controle-grupo")) {
+  controle.onclick = () => exibirGrupo(controle, controle.getAttribute("aria-expanded") !== "true");
+}
 function itemPadrao(item) {
   return item.tipo === "insumo" || normalizar(item.nome).includes("acai");
 }
@@ -169,6 +176,7 @@ function pesquisarPlanilha() {
       extrasPlanilha.add(item.id);
       el("busca-planilha").value = "";
       atualizarLinhasCusto(true);
+      exibirGrupo(document.querySelector('[aria-controls="linhas-custo"]'), true);
       el("linhas-custo").querySelector('[data-id="' + item.id + '"]').focus();
     };
     opcoes.append(botao);

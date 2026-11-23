@@ -10,6 +10,9 @@ body:has(#painel:not([hidden])) .atalho-painel { display: inline; }
 .grade-custos input { min-width: 6rem; max-width: 10rem; text-align: right; }
 .grade-custos input[aria-invalid="true"] { border-color: #a52135; }
 #grupo-insumos { background: #d6e9da; color: #204a30; }
+.grade-custos .controle-grupo { width: 100%; border: 0; text-align: left; font-weight: 700; }
+.controle-grupo::before { content: ""; display: inline-block; margin-right: .65rem; width: .45rem; height: .45rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(-45deg); }
+.controle-grupo[aria-expanded="true"]::before { transform: rotate(45deg); }
 #linhas-insumos { background: #eff7f0; color: #204a30; }
 #retorno-cadastro:not(:empty) { padding: .7rem .9rem; border-radius: .5rem; background: #f3edf3; }
 #retorno-cadastro[data-estado="sucesso"] { background: #e5f3e9; color: #204a30; }

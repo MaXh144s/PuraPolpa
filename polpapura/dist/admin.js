@@ -109,6 +109,7 @@ el("login").onsubmit = async evento => {
 el("sair").onclick = () => location.reload();
 
 function listar() {
+  atualizarLinhasCusto();
   const busca = normalizar(el("busca").value);
   const lista = el("lista");
   lista.replaceChildren();
@@ -137,6 +138,67 @@ function listar() {
   if (!filtrados.length) lista.textContent = itens.length ? "Nenhum item encontrado." : "Seu catálogo está vazio. Cadastre o primeiro produto ou receita.";
 }
 el("busca").oninput = listar;
+
+let catalogoPlanilha;
+function atualizarLinhasCusto() {
+  if (catalogoPlanilha === itens) return;
+  catalogoPlanilha = itens;
+  const corpo = el("linhas-custo");
+  const usos = new Map(Array.from(corpo.querySelectorAll("input"), campo => [campo.dataset.id, campo.value]));
+  corpo.replaceChildren();
+  for (const item of [...itens].sort((a,b) => a.nome.localeCompare(b.nome, "pt-BR"))) {
+    const linha = corpo.insertRow();
+    const nome = document.createElement("th");
+    nome.scope = "row";
+    nome.textContent = item.nome;
+    linha.append(nome);
+    linha.insertCell().textContent = gramas.format(item.peso);
+    linha.insertCell().textContent = moeda.format(item.preco);
+    const uso = document.createElement("input");
+    uso.inputMode = "decimal";
+    uso.dataset.id = item.id;
+    uso.placeholder = "0";
+    uso.value = usos.get(item.id) ?? "";
+    uso.setAttribute("aria-label", "Gramas de " + item.nome + " por garrafa");
+    linha.insertCell().append(uso);
+    linha.insertCell();
+  }
+  if (!itens.length) {
+    const celula = corpo.insertRow().insertCell();
+    celula.colSpan = 5;
+    celula.textContent = "Adicione um produto ao catálogo para calcular seu custo na garrafa.";
+  }
+  calcularGarrafa();
+}
+
+function valorPlanilha(campo) {
+  try {
+    const valor = numero(campo.value.trim() || "0", "o custo", true);
+    campo.removeAttribute("aria-invalid");
+    return valor;
+  } catch {
+    campo.setAttribute("aria-invalid", "true");
+    return NaN;
+  }
+}
+function calcularGarrafa() {
+  const catalogo = new Map(itens.map(item => [item.id, item]));
+  let total = valorPlanilha(el("custo-embalagem"));
+  for (const campo of el("linhas-custo").querySelectorAll("input")) {
+    const item = catalogo.get(campo.dataset.id);
+    const custo = item.preco * (valorPlanilha(campo) / item.peso);
+    campo.closest("tr").lastElementChild.textContent = Number.isFinite(custo) ? moeda.format(custo) : "—";
+    total += custo;
+  }
+  el("custo-unitario").value = Number.isFinite(total) ? moeda.format(total) : "Revise os valores destacados.";
+}
+el("planilha").oninput = calcularGarrafa;
+el("novo-produto").onclick = evento => {
+  evento.preventDefault();
+  editar();
+  listar();
+  el("nome").focus();
+};
 
 function receitaDependente(id) {
   return itens.find(i => i.componentes?.some(parte => parte.id === id));

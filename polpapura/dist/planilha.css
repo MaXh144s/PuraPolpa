@@ -1,0 +1,11 @@
+.cabecalho-admin { gap: 1rem; flex-wrap: wrap; }
+.cabecalho-admin .atalho-painel { display: none; }
+body:has(#painel:not([hidden])) .atalho-painel { display: inline; }
+#planilha { margin-top: 3rem; }
+.grade-custos { margin-top: 1rem; overflow-x: auto; }
+.grade-custos table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.grade-custos th, .grade-custos td { padding: .6rem; border: 1px solid #d5c7d2; text-align: right; }
+.grade-custos thead, .grade-custos tfoot { background: #f3edf3; }
+.grade-custos th:first-child { text-align: left; }
+.grade-custos input { min-width: 6rem; max-width: 10rem; text-align: right; }
+.grade-custos input[aria-invalid="true"] { border-color: #a52135; }

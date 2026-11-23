@@ -385,6 +385,10 @@ footer em {
 .atalho-carrinho { position: relative; display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; }
 #contagem { position: absolute; top: 0; right: -4px; min-width: 1.25rem; padding: 0 .3rem; border-radius: 1rem; background: #b91c28; color: white; text-align: center; font: bold .75rem/1.25rem Leitura, Arial, sans-serif; }
 header nav { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.links-menu { display: flex; align-items: center; gap: inherit; }
+@media (max-width: 480px) {
+  .menu-principal nav { flex-basis: 100%; justify-content: space-between; }
+}
 .compras { padding-block: 2.5rem; border-top: 1px solid #ddcfd9; }
 .compras h2 { font-size: clamp(2.3rem, 5vw, 3.8rem); }
 .compras ul { padding: 0; list-style: none; max-width: 42rem; }

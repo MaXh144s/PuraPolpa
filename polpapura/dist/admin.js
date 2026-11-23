@@ -208,6 +208,14 @@ function calcularGarrafa() {
     total += custo;
   }
   el("custo-unitario").value = Number.isFinite(total) ? moeda.format(total) : "Revise os valores destacados.";
+  const campoVenda = el("preco-venda");
+  const venda = valorPlanilha(campoVenda);
+  const lucro = venda - total;
+  const temResultado = campoVenda.value.trim() !== "" && Number.isFinite(lucro);
+  el("lucro-garrafa").value = temResultado ? moeda.format(lucro) : "—";
+  el("margem-venda").value = temResultado && venda > 0
+    ? (lucro / venda).toLocaleString("pt-BR", {style:"percent", maximumFractionDigits:2})
+    : "—";
 }
 el("planilha").oninput = calcularGarrafa;
 el("novo-produto").onclick = evento => {

@@ -200,7 +200,7 @@ function valorPlanilha(campo) {
 }
 function calcularGarrafa() {
   const catalogo = new Map(itens.map(item => [item.id, item]));
-  let total = valorPlanilha(el("custo-embalagem"));
+  let total = 0;
   for (const campo of el("planilha").querySelectorAll("input[data-id]")) {
     const item = catalogo.get(campo.dataset.id);
     const custo = item.preco * (valorPlanilha(campo) / tamanhoLote(item));

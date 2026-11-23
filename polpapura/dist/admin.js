@@ -151,8 +151,33 @@ function listar() {
 el("busca").oninput = listar;
 
 let catalogoPlanilha;
-function atualizarLinhasCusto() {
-  if (catalogoPlanilha === itens) return;
+const extrasPlanilha = new Set();
+function itemPadrao(item) {
+  return item.tipo === "insumo" || normalizar(item.nome).includes("acai");
+}
+function pesquisarPlanilha() {
+  const termo = normalizar(el("busca-planilha").value);
+  const opcoes = el("opcoes-planilha");
+  opcoes.replaceChildren();
+  if (!termo) return;
+  for (const item of itens) {
+    if (itemPadrao(item) || extrasPlanilha.has(item.id) || !normalizar(item.nome).includes(termo)) continue;
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.textContent = "Adicionar " + item.nome;
+    botao.onclick = () => {
+      extrasPlanilha.add(item.id);
+      el("busca-planilha").value = "";
+      atualizarLinhasCusto(true);
+      el("linhas-custo").querySelector('[data-id="' + item.id + '"]').focus();
+    };
+    opcoes.append(botao);
+  }
+  if (!opcoes.children.length) opcoes.textContent = "Nenhum item disponível para adicionar com esse nome.";
+}
+el("busca-planilha").oninput = pesquisarPlanilha;
+function atualizarLinhasCusto(forcar = false) {
+  if (!forcar && catalogoPlanilha === itens) return;
   catalogoPlanilha = itens;
   const corpo = el("linhas-custo");
   const insumos = el("linhas-insumos");
@@ -160,11 +185,25 @@ function atualizarLinhasCusto() {
   corpo.replaceChildren();
   insumos.replaceChildren();
   for (const item of [...itens].sort((a,b) => a.nome.localeCompare(b.nome, "pt-BR"))) {
+    const padrao = itemPadrao(item);
+    if (!padrao && !extrasPlanilha.has(item.id)) continue;
     const porUnidade = item.tipo === "insumo";
     const linha = (porUnidade ? insumos : corpo).insertRow();
     const nome = document.createElement("th");
     nome.scope = "row";
     nome.textContent = item.nome;
+    if (!padrao) {
+      const retirar = document.createElement("button");
+      retirar.type = "button";
+      retirar.textContent = "×";
+      retirar.setAttribute("aria-label", "Retirar " + item.nome + " do cálculo");
+      retirar.onclick = () => {
+        extrasPlanilha.delete(item.id);
+        atualizarLinhasCusto(true);
+        el("busca-planilha").focus();
+      };
+      nome.append(" ", retirar);
+    }
     linha.append(nome);
     linha.insertCell().textContent = descricaoLote(item);
     linha.insertCell().textContent = moeda.format(item.preco);
@@ -187,6 +226,7 @@ function atualizarLinhasCusto() {
     celula.colSpan = 5;
     celula.textContent = "Adicione um produto ao catálogo para calcular seu custo na garrafa.";
   }
+  pesquisarPlanilha();
   calcularGarrafa();
 }
 

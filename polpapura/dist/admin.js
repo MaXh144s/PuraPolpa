@@ -1,7 +1,13 @@
 const el = id => document.getElementById(id);
 const moeda = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
 const gramas = new Intl.NumberFormat("pt-BR", {maximumFractionDigits:3});
-const tipos = {receita:"Receita", produto:"Produto"};
+const tipos = {receita:"Receita", produto:"Produto", insumo:"Insumo"};
+function tamanhoLote(item) {
+  return item.tipo === "insumo" ? item.quantidade : item.peso;
+}
+function descricaoLote(item) {
+  return gramas.format(tamanhoLote(item)) + (item.tipo === "insumo" ? " un." : " g");
+}
 const normalizar = nome => nome.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 let registro, chave, chaveSenha, editando;
 let itens = [];
@@ -120,7 +126,8 @@ function listar() {
     const botao = document.createElement("button");
     const detalhe = document.createElement("small");
 
-    detalhe.textContent = tipos[i.tipo] + " · " + gramas.format(i.peso) + " g · " + moeda.format(i.preco);
+    detalhe.textContent = tipos[i.tipo] + " · " + descricaoLote(i) + " · " + moeda.format(i.preco);
+    if (i.tipo === "insumo") detalhe.textContent += " · " + moeda.format(i.preco / i.quantidade) + " por unidade";
     botao.append(i.nome, detalhe);
     botao.setAttribute("aria-current", String(i.id === editando));
     botao.onclick = () => { editar(i); listar(); el("nome").focus(); };
@@ -152,14 +159,14 @@ function atualizarLinhasCusto() {
     nome.scope = "row";
     nome.textContent = item.nome;
     linha.append(nome);
-    linha.insertCell().textContent = gramas.format(item.peso);
+    linha.insertCell().textContent = descricaoLote(item);
     linha.insertCell().textContent = moeda.format(item.preco);
     const uso = document.createElement("input");
-    uso.inputMode = "decimal";
+    uso.inputMode = item.tipo === "insumo" ? "numeric" : "decimal";
     uso.dataset.id = item.id;
     uso.placeholder = "0";
     uso.value = usos.get(item.id) ?? "";
-    uso.setAttribute("aria-label", "Gramas de " + item.nome + " por garrafa");
+    uso.setAttribute("aria-label", (item.tipo === "insumo" ? "Unidades de " : "Gramas de ") + item.nome + " por garrafa");
     linha.insertCell().append(uso);
     linha.insertCell();
   }
@@ -174,6 +181,7 @@ function atualizarLinhasCusto() {
 function valorPlanilha(campo) {
   try {
     const valor = numero(campo.value.trim() || "0", "o custo", true);
+    if (campo.inputMode === "numeric" && !Number.isSafeInteger(valor)) throw new Error("Informe unidades inteiras.");
     campo.removeAttribute("aria-invalid");
     return valor;
   } catch {
@@ -186,7 +194,7 @@ function calcularGarrafa() {
   let total = valorPlanilha(el("custo-embalagem"));
   for (const campo of el("linhas-custo").querySelectorAll("input")) {
     const item = catalogo.get(campo.dataset.id);
-    const custo = item.preco * (valorPlanilha(campo) / item.peso);
+    const custo = item.preco * (valorPlanilha(campo) / tamanhoLote(item));
     campo.closest("tr").lastElementChild.textContent = Number.isFinite(custo) ? moeda.format(custo) : "—";
     total += custo;
   }
@@ -269,6 +277,7 @@ function editar(item) {
   for (const campo of ["peso","preco","uso"]) {
     el(campo).value = String(item?.[campo] ?? "").replace(".", ",");
   }
+  el("quantidade-lote").value = item?.quantidade ?? "";
   modo();
   aviso("");
 }
@@ -276,10 +285,15 @@ el("novo").onclick = () => { editar(); listar(); el("nome").focus(); };
 
 function modo() {
   const receita = el("tipo").value === "receita";
+  const insumo = el("tipo").value === "insumo";
   const automatico = receita && el("automatico").checked;
   el("opcao-composicao").hidden = !receita;
   el("composicao").hidden = el("composicao").disabled = !automatico;
-  el("totais-manuais").hidden = el("preco").disabled = el("peso").disabled = automatico;
+  el("totais-manuais").hidden = el("preco").disabled = automatico;
+  el("peso").parentElement.hidden = insumo;
+  el("peso").disabled = automatico || insumo;
+  el("quantidade-lote").parentElement.hidden = el("quantidade-lote").disabled = !insumo;
+  el("uso").parentElement.hidden = el("uso").disabled = insumo;
   if (automatico && !el("ingredientes").children.length) adicionarParte();
   el("sem-produtos").hidden = itens.some(i => i.tipo === "produto" && i.id !== editando);
   resumo();
@@ -299,18 +313,27 @@ function rascunho() {
     }));
     Object.assign(item, totaisComponentes(item.componentes, new Map(itens.map(i => [i.id, i]))));
   } else {
-    item.peso = numero(el("peso").value, "o peso total");
+    if (item.tipo === "insumo") {
+      item.quantidade = numero(el("quantidade-lote").value, "a quantidade de itens");
+      if (!Number.isSafeInteger(item.quantidade)) throw new Error("Informe uma quantidade inteira de itens.");
+    } else item.peso = numero(el("peso").value, "o peso total");
     item.preco = numero(el("preco").value, "o valor total", true);
   }
-  if (el("uso").value.trim()) item.uso = numero(el("uso").value, "a quantidade usada", true);
+  if (!el("uso").disabled && el("uso").value.trim()) item.uso = numero(el("uso").value, "a quantidade usada", true);
   return item;
 }
 function resumo() {
-  const porcao = Boolean(el("uso").value.trim());
-  el("rotulo-preco").textContent = el("tipo").value === "receita" ? "Custo total (R$)" : "Preço total (R$)";
-  el("legenda-total").textContent = porcao ? "Custo da quantidade usada" : "Custo total";
+  const insumo = el("tipo").value === "insumo";
+  const porcao = !insumo && Boolean(el("uso").value.trim());
+  el("rotulo-preco").textContent = insumo ? "Valor total do lote (R$)" : el("tipo").value === "receita" ? "Custo total (R$)" : "Preço total (R$)";
+  el("legenda-total").textContent = insumo ? "Custo por unidade" : porcao ? "Custo da quantidade usada" : "Custo total";
   try {
     const item = rascunho();
+    if (insumo) {
+      el("total").textContent = moeda.format(item.preco / item.quantidade);
+      el("detalhe").textContent = moeda.format(item.preco) + " por " + descricaoLote(item);
+      return;
+    }
     const custo = porcao ? item.preco * (item.uso / item.peso) : item.preco;
     el("total").textContent = moeda.format(custo);
     el("detalhe").textContent = porcao

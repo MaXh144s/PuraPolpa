@@ -35,7 +35,7 @@
 <label>Buscar no catálogo<input type="search" id="busca" placeholder="Nome da receita ou do produto"></label>
 <ul id="lista"></ul></section>
 <section class="editor"><div class="linha"><h2 id="titulo-editor">Novo item</h2><button id="novo" type="button">Novo item</button></div>
-<form id="item"><label>Tipo<select id="tipo"><option value="produto">Unidade de produto</option><option value="receita">Receita composta</option></select></label>
+<form id="item"><label>Tipo<select id="tipo"><option value="produto">Unidade de produto</option><option value="receita">Receita composta</option><option value="insumo">Insumos</option></select></label>
 <label>Nome<input id="nome" required placeholder="Ex.: leite condensado"></label>
 <label id="opcao-composicao" hidden><input id="automatico" type="checkbox"> Calcular pelos produtos do catálogo</label>
 <fieldset id="composicao" hidden><legend>Produtos da receita</legend>
@@ -45,6 +45,7 @@
 </fieldset>
 <div id="totais-manuais">
 <label>Peso total (g)<input id="peso" required inputmode="decimal" placeholder="Ex.: 395"></label>
+<label hidden>Quantidade de itens no lote<input id="quantidade-lote" required disabled inputmode="numeric" pattern="[0-9]+" placeholder="Ex.: 100"></label>
 <label><span id="rotulo-preco">Preço total (R$)</span><input id="preco" required inputmode="decimal" placeholder="Ex.: 5,19"></label>
 </div>
 <label>Quantidade usada (g), opcional<input id="uso" inputmode="decimal" placeholder="Ex.: 40"></label>
@@ -52,9 +53,9 @@
 <button class="principal" id="salvar">Cadastrar item</button></form></section></div>
 <section id="planilha" aria-labelledby="titulo-planilha">
 <h2 id="titulo-planilha">Calcular valor unitário</h2>
-<p>Informe quantos gramas de cada produto ou receita entram em uma garrafa.</p>
+<p>Informe os gramas de cada ingrediente e as unidades de cada insumo usados em uma garrafa.</p>
 <div class="grade-custos"><table aria-label="Composição do custo de uma garrafa">
-<thead><tr><th scope="col">Produto ou receita</th><th scope="col">Peso do catálogo (g)</th><th scope="col">Custo do catálogo</th><th scope="col">Uso por garrafa (g)</th><th scope="col">Custo por garrafa</th></tr></thead>
+<thead><tr><th scope="col">Item do catálogo</th><th scope="col">Quantidade do lote</th><th scope="col">Custo do catálogo</th><th scope="col">Uso por garrafa</th><th scope="col">Custo por garrafa</th></tr></thead>
 <tbody id="linhas-custo"></tbody>
 <tfoot>
 <tr><th scope="row" colspan="4"><label for="custo-embalagem">Embalagem por garrafa (R$)</label></th><td><input id="custo-embalagem" inputmode="decimal" placeholder="0,00"></td></tr>

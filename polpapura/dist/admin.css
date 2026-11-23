@@ -34,8 +34,8 @@
 #automatico{width:1.1rem;height:1.1rem;accent-color:var(--purple)}
 #opcao-composicao[hidden],#totais-manuais[hidden]{display:none}
 #composicao{min-width:0;margin:0;border:1px solid #bfadbc;border-radius:.6rem;padding:1rem}
-.ingrediente{display:grid;gap:.5rem;grid-template-columns:minmax(0,1fr) minmax(5rem,.65fr);margin:.5rem 0 1rem}
-.ingrediente button{grid-column:1/-1}
+.ingrediente{display:grid;gap:.5rem;grid-template-columns:minmax(0,1fr) minmax(5rem,.65fr) auto;margin:.5rem 0 1rem}
+.ingrediente button{align-self:end;width:2.75rem;height:2.75rem;padding:0;font-size:1.4rem}
 #lista .acoes{display:flex;gap:.5rem;margin:.2rem .5rem}
 #lista .acoes button{width:auto;text-decoration:underline}
 @media(max-width:760px){.colunas{grid-template-columns:1fr;gap:2rem}#lista{max-height:36vh}}

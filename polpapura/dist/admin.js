@@ -224,14 +224,19 @@ async function remover(item) {
 function adicionarParte(parte) {
   const linha = document.createElement("div");
   linha.className = "ingrediente";
-  linha.innerHTML = '<label>Produto<select required></select></label><label>Quantidade (g)<input required inputmode="decimal"></label><button type="button">Retirar da receita</button>';
+  linha.innerHTML = '<label>Produto<select required></select></label><label>Quantidade (g)<input required inputmode="decimal"></label><button type="button" aria-label="Retirar produto da receita" title="Retirar produto da receita">×</button>';
   const select = linha.querySelector("select");
   select.add(new Option("Selecione…", ""));
   const produtos = itens.filter(i => i.tipo === "produto" && i.id !== editando);
   for (const i of produtos.sort((a,b) => a.nome.localeCompare(b.nome,"pt-BR"))) select.add(new Option(i.nome, i.id));
   select.value = parte?.id ?? "";
   linha.querySelector("input").value = String(parte?.peso ?? "").replace(".", ",");
-  linha.querySelector("button").onclick = () => { linha.remove(); resumo(); };
+  linha.querySelector("button").onclick = () => {
+    const proximo = linha.nextElementSibling?.querySelector("select") ?? el("adicionar");
+    linha.remove();
+    resumo();
+    proximo.focus();
+  };
   el("ingredientes").append(linha);
   return select;
 }

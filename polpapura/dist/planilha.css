@@ -11,3 +11,6 @@ body:has(#painel:not([hidden])) .atalho-painel { display: inline; }
 .grade-custos input[aria-invalid="true"] { border-color: #a52135; }
 #grupo-insumos { background: #d6e9da; color: #204a30; }
 #linhas-insumos { background: #eff7f0; color: #204a30; }
+#retorno-cadastro:not(:empty) { padding: .7rem .9rem; border-radius: .5rem; background: #f3edf3; }
+#retorno-cadastro[data-estado="sucesso"] { background: #e5f3e9; color: #204a30; }
+#retorno-cadastro[data-estado="erro"] { background: #fbe9e8; color: #832327; }

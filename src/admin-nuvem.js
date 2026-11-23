@@ -29,6 +29,22 @@ async function consultar(funcao, parametros) {
   return data.itens;
 }
 window.catalogoOnline = {
+  ler() { return consultar("pp_catalogo"); },
+  async cadastrar(dados) {
+    try {
+      return await this.alterar("salvar", dados);
+    } catch (erro) {
+      if (!erro.message.startsWith("O catálogo mudou em outro dispositivo.")) throw erro;
+      const atual = await this.ler();
+      itens = atual;
+      listar();
+      if (atual.some(i => i.id === dados.id)) return atual;
+      if (atual.some(i => normalizar(i.nome) === normalizar(dados.nome))) {
+        throw new Error("Já existe um item com esse nome no catálogo online.");
+      }
+      return this.alterar("salvar", dados);
+    }
+  },
   alterar(acao, dados) {
     return consultar("pp_alterar", {versao:revisao, acao, dados});
   }

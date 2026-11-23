@@ -11,6 +11,7 @@ function descricaoLote(item) {
 const normalizar = nome => nome.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 let registro, chave, chaveSenha, editando;
 let itens = [];
+let idNovo;
 const modoOnline = document.documentElement.dataset.catalogo === "online";
 
 async function persistir(novos, acao, dados) {
@@ -116,6 +117,9 @@ el("sair").onclick = () => location.reload();
 
 function listar() {
   atualizarLinhasCusto();
+  const insumos = itens.filter(item => item.tipo === "insumo").length;
+  el("resumo-catalogo").textContent = (modoOnline ? "Catálogo online" : "Catálogo deste navegador") +
+    " · " + itens.length + " itens · " + insumos + (insumos === 1 ? " insumo" : " insumos");
   const busca = normalizar(el("busca").value);
   const lista = el("lista");
   lista.replaceChildren();
@@ -124,6 +128,7 @@ function listar() {
   for (const i of filtrados) {
     const li = document.createElement("li");
     const botao = document.createElement("button");
+    botao.dataset.item = i.id;
     const detalhe = document.createElement("small");
 
     detalhe.textContent = tipos[i.tipo] + " · " + descricaoLote(i) + " · " + moeda.format(i.preco);
@@ -268,6 +273,8 @@ function totaisComponentes(componentes, produtos) {
 }
 
 function editar(item) {
+  idNovo = null;
+  retornoCadastro("");
   editando = item?.id ?? null;
   el("item").reset();
   el("titulo-editor").textContent = item ? "Editar " + item.nome : "Novo item";
@@ -349,10 +356,27 @@ function resumo() {
   }
 }
 el("item").oninput = resumo;
+function retornoCadastro(texto, estado = "") {
+  el("retorno-cadastro").textContent = texto;
+  el("retorno-cadastro").dataset.estado = estado;
+  el("ver-cadastro").hidden = true;
+}
+el("item").addEventListener("invalid", evento => {
+  retornoCadastro("Confira o campo " + (evento.target.labels?.[0]?.textContent.trim() || "destacado") + ".", "erro");
+}, true);
+el("ver-cadastro").onclick = () => {
+  el("busca").value = "";
+  listar();
+  const linha = el("lista").querySelector('[data-item="' + el("ver-cadastro").dataset.item + '"]');
+  if (linha) { linha.focus(); linha.scrollIntoView({ block: "center" }); }
+};
 el("item").onsubmit = async evento => {
   evento.preventDefault();
   if (el("salvar").disabled) return;
   el("salvar").disabled = true;
+  const botao = el("salvar");
+  botao.textContent = "Salvando…";
+  retornoCadastro("Salvando no catálogo…");
   try {
     const item = rascunho();
     if (!item.nome) throw new Error("Informe um nome.");
@@ -360,7 +384,8 @@ el("item").onsubmit = async evento => {
     if (editando && item.tipo !== "produto" && receitaDependente(editando)) throw new Error("Este produto faz parte de uma receita. Retire-o da composição antes de mudar o tipo.");
     let novos;
     if (editando === null) {
-      item.id = crypto.randomUUID();
+      idNovo ??= crypto.randomUUID();
+      item.id = idNovo;
       novos = [...itens, item];
     } else {
       novos = itens.map(i => i.id === editando ? item : i);
@@ -368,13 +393,31 @@ el("item").onsubmit = async evento => {
 
     const produtos = new Map(novos.map(i => [i.id, i]));
     novos = novos.map(i => i.componentes ? {...i, ...totaisComponentes(i.componentes, produtos)} : i);
-    await persistir(novos, "salvar", item);
+    if (modoOnline) {
+      if (editando === null) await window.catalogoOnline.cadastrar(item);
+      else await window.catalogoOnline.alterar("salvar", item);
+      retornoCadastro("Conferindo o item no catálogo online…");
+      const confirmados = await window.catalogoOnline.ler();
+      const salvo = confirmados.find(i => i.id === item.id);
+      if (!salvo || salvo.tipo !== item.tipo || salvo.nome !== item.nome ||
+          (item.tipo === "insumo" && (salvo.quantidade !== item.quantidade || salvo.preco !== item.preco))) {
+        throw new Error("O catálogo online não confirmou os dados deste item. Confira o catálogo antes de tentar novamente.");
+      }
+      itens = confirmados;
+    } else {
+      await persistir(novos, "salvar", item);
+    }
     el("busca").value = "";
     editar();
     listar();
-    aviso(item.nome + ": item salvo no catálogo.");
-    el("nome").focus();
-  } catch (erro) { aviso(erro.message); }
-  finally { el("salvar").disabled = false; }
+    retornoCadastro(tipos[item.tipo] + " “" + item.nome + "” salvo " +
+      (modoOnline ? "no catálogo online." : "no catálogo deste navegador."), "sucesso");
+    el("ver-cadastro").dataset.item = item.id;
+    el("ver-cadastro").hidden = false;
+  } catch (erro) { retornoCadastro(erro.message, "erro"); }
+  finally {
+    botao.disabled = false;
+    botao.textContent = editando ? "Salvar alterações" : "Cadastrar item";
+  }
 };
 if (!modoOnline) iniciar();

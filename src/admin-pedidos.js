@@ -5,8 +5,8 @@ export function abrirPedidos(supabase) {
   const secao = document.createElement("section");
   secao.id = "pedidos-admin";
   secao.innerHTML = `<h2>Pedidos</h2>
-    <form><label>Buscar por número do pedido ou nome do cliente
-      <input type="search" name="termo" maxlength="100" placeholder="Ex.: PP-1001">
+    <form autocomplete="off" autocorrect="off" autocapitalize="none"><label>Buscar por número do pedido ou nome do cliente
+      <input type="search" name="termo" maxlength="100" spellcheck="false" placeholder="Ex.: PP-1001">
     </label><button type="submit">Buscar pedidos</button></form>
     <p role="status"></p><div class="resultados"></div>`;
   const painel = document.getElementById("painel");

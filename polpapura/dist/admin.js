@@ -73,7 +73,6 @@ async function iniciar() {
     if (!crypto.subtle) throw new Error();
     el("titulo-acesso").textContent = registro ? "Entrar no painel" : "Criar acesso local";
     el("instrucao").textContent = registro ? "Entre para consultar os custos e editar o catálogo." : "Escolha um usuário e uma senha de pelo menos 8 caracteres para este navegador.";
-    el("senha").autocomplete = registro ? "current-password" : "new-password";
     el("senha").minLength = registro ? 1 : 8;
     el("entrar").textContent = registro ? "Entrar" : "Criar acesso";
     el("entrar").disabled = false;
@@ -170,6 +169,10 @@ function atualizarLinhasCusto() {
     linha.insertCell().textContent = descricaoLote(item);
     linha.insertCell().textContent = moeda.format(item.preco);
     const uso = document.createElement("input");
+    uso.autocomplete = "off";
+    uso.spellcheck = false;
+    uso.setAttribute("autocorrect", "off");
+    uso.autocapitalize = "none";
     uso.inputMode = item.tipo === "insumo" ? "numeric" : "decimal";
     uso.dataset.id = item.id;
     uso.placeholder = "0";
@@ -249,7 +252,7 @@ async function remover(item) {
 function adicionarParte(parte) {
   const linha = document.createElement("div");
   linha.className = "ingrediente";
-  linha.innerHTML = '<label>Produto<select required></select></label><label>Quantidade (g)<input required inputmode="decimal"></label><button type="button" aria-label="Retirar produto da receita" title="Retirar produto da receita">×</button>';
+  linha.innerHTML = '<label>Produto<select required></select></label><label>Quantidade (g)<input required inputmode="decimal" spellcheck="false"></label><button type="button" aria-label="Retirar produto da receita" title="Retirar produto da receita">×</button>';
   const select = linha.querySelector("select");
   select.add(new Option("Selecione…", ""));
   const produtos = itens.filter(i => i.tipo === "produto" && i.id !== editando);

@@ -22,11 +22,10 @@ globalThis.resumoPedido = function (pedido) {
   const linhas = [
     pedido.codigo ? "Pedido #" + pedido.codigo : "Olá, PuraPolpa! Gostaria de fazer este pedido.",
     "Cliente: " + pedido.cliente,
-    (pedido.modalidade === "Entrega" ? "🚚" : "📦") + " Modalidade: " + pedido.modalidade,
+    "Modalidade: " + pedido.modalidade,
   ];
-  if (pedido.modalidade === "Entrega") linhas.push("📍 Endereço: " + pedido.endereco);
-  const simbolosPagamento = { Dinheiro: "💵 ", Pix: "🔹 ", Crédito: "💳 ", Débito: "💳 " };
-  linhas.push((simbolosPagamento[pedido.pagamento] || "") + "Pagamento: " + pedido.pagamento, "", "Itens:");
+  if (pedido.modalidade === "Entrega") linhas.push("Endereço: " + pedido.endereco);
+  linhas.push("Pagamento: " + pedido.pagamento, "", "Itens:");
   for (const item of agruparItens(pedido.itens)) {
     linhas.push(descricaoItem(item, real(item.centavos)));
     linhas.push(item.condimentos.length ? item.condimentos.join(", ") : "Sem condimentos");

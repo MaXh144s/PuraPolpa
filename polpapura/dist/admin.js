@@ -151,10 +151,13 @@ function atualizarLinhasCusto() {
   if (catalogoPlanilha === itens) return;
   catalogoPlanilha = itens;
   const corpo = el("linhas-custo");
-  const usos = new Map(Array.from(corpo.querySelectorAll("input"), campo => [campo.dataset.id, campo.value]));
+  const insumos = el("linhas-insumos");
+  const usos = new Map(Array.from(el("planilha").querySelectorAll("input[data-id]"), campo => [campo.dataset.id + campo.inputMode, campo.value]));
   corpo.replaceChildren();
+  insumos.replaceChildren();
   for (const item of [...itens].sort((a,b) => a.nome.localeCompare(b.nome, "pt-BR"))) {
-    const linha = corpo.insertRow();
+    const porUnidade = item.tipo === "insumo";
+    const linha = (porUnidade ? insumos : corpo).insertRow();
     const nome = document.createElement("th");
     nome.scope = "row";
     nome.textContent = item.nome;
@@ -165,11 +168,12 @@ function atualizarLinhasCusto() {
     uso.inputMode = item.tipo === "insumo" ? "numeric" : "decimal";
     uso.dataset.id = item.id;
     uso.placeholder = "0";
-    uso.value = usos.get(item.id) ?? "";
+    uso.value = usos.get(item.id + uso.inputMode) ?? (porUnidade ? "1" : "");
     uso.setAttribute("aria-label", (item.tipo === "insumo" ? "Unidades de " : "Gramas de ") + item.nome + " por garrafa");
     linha.insertCell().append(uso);
     linha.insertCell();
   }
+  el("grupo-insumos").hidden = !insumos.rows.length;
   if (!itens.length) {
     const celula = corpo.insertRow().insertCell();
     celula.colSpan = 5;
@@ -192,7 +196,7 @@ function valorPlanilha(campo) {
 function calcularGarrafa() {
   const catalogo = new Map(itens.map(item => [item.id, item]));
   let total = valorPlanilha(el("custo-embalagem"));
-  for (const campo of el("linhas-custo").querySelectorAll("input")) {
+  for (const campo of el("planilha").querySelectorAll("input[data-id]")) {
     const item = catalogo.get(campo.dataset.id);
     const custo = item.preco * (valorPlanilha(campo) / tamanhoLote(item));
     campo.closest("tr").lastElementChild.textContent = Number.isFinite(custo) ? moeda.format(custo) : "—";

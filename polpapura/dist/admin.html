@@ -2,8 +2,8 @@
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>Custos de produção · PuraPolpa</title>
-<link rel="icon" href="icones/favicon.png"><link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="planilha.css">
-<script defer src="cofre.js?v=recuperacao1"></script><script defer src="admin.js?v=planilha1"></script><script defer src="recuperacao.js"></script>
+<link rel="icon" href="icones/favicon.png"><link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="planilha.css?v=insumos2">
+<script defer src="cofre.js?v=recuperacao1"></script><script defer src="admin.js?v=insumos2"></script><script defer src="recuperacao.js"></script>
 </head><body>
 <header class="wrap cabecalho-admin"><a class="brand" href="index.html">PuraPolpa</a><nav aria-label="Administração"><a class="atalho-painel" id="novo-produto" href="#item">Adicionar produto</a><a class="atalho-painel" href="#planilha">Calcular valor unitário</a><a href="index.html">Voltar à vitrine</a><button id="sair" hidden>Sair</button></nav></header>
 <main class="wrap admin">
@@ -57,6 +57,8 @@
 <div class="grade-custos"><table aria-label="Composição do custo de uma garrafa">
 <thead><tr><th scope="col">Item do catálogo</th><th scope="col">Quantidade do lote</th><th scope="col">Custo do catálogo</th><th scope="col">Uso por garrafa</th><th scope="col">Custo por garrafa</th></tr></thead>
 <tbody id="linhas-custo"></tbody>
+<tbody id="grupo-insumos" hidden><tr><th scope="rowgroup" colspan="5">Insumos por garrafa</th></tr></tbody>
+<tbody id="linhas-insumos" aria-label="Insumos por garrafa"></tbody>
 <tfoot>
 <tr><th scope="row" colspan="4"><label for="custo-embalagem">Embalagem por garrafa (R$)</label></th><td><input id="custo-embalagem" inputmode="decimal" placeholder="0,00"></td></tr>
 <tr><th scope="row" colspan="4">Custo total de uma garrafa</th><td><output id="custo-unitario" aria-live="polite"></output></td></tr>

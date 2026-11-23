@@ -19,6 +19,11 @@ function falha(erro) {
 
 async function consultar(funcao, parametros) {
   const {data,error} = await supabase.rpc(funcao, parametros);
+  if (error && parametros?.dados?.tipo === "insumo" &&
+      ((error.code === "23502" && error.message.includes("peso")) ||
+       (error.code === "23514" && error.message.includes("itens_tipo_check")))) {
+    throw new Error("O banco online ainda exige o formato antigo. Execute 003_insumos.sql no SQL Editor do Supabase e tente cadastrar novamente.");
+  }
   if (error) throw new Error(falha(error));
   revisao = data.revisao;
   return data.itens;

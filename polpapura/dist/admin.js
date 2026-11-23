@@ -251,10 +251,15 @@ function valorPlanilha(campo) {
 }
 function calcularGarrafa() {
   const catalogo = new Map(itens.map(item => [item.id, item]));
+  const usados = [];
+  el("aviso-copia").textContent = "";
+  el("copia-manual").hidden = true;
   let total = 0;
   for (const campo of el("planilha").querySelectorAll("input[data-id]")) {
     const item = catalogo.get(campo.dataset.id);
-    const custo = item.preco * (valorPlanilha(campo) / tamanhoLote(item));
+    const quantidade = valorPlanilha(campo);
+    const custo = item.preco * (quantidade / tamanhoLote(item));
+    if (quantidade > 0) usados.push({item, quantidade, custo});
     campo.closest("tr").lastElementChild.textContent = Number.isFinite(custo) ? moeda.format(custo) : "—";
     total += custo;
   }
@@ -267,7 +272,42 @@ function calcularGarrafa() {
   el("margem-venda").value = temResultado && venda > 0
     ? (lucro / venda).toLocaleString("pt-BR", {style:"percent", maximumFractionDigits:2})
     : "—";
+  return { usados, total, venda: campoVenda.value.trim() ? venda : null };
 }
+el("copiar-receita").onclick = async () => {
+  const { usados, total, venda } = calcularGarrafa();
+  const aviso = el("aviso-copia");
+  if (!Number.isFinite(total) || Number.isNaN(venda)) {
+    aviso.textContent = "Revise os valores destacados antes de copiar.";
+    return;
+  }
+  if (!usados.length) {
+    aviso.textContent = "Informe a quantidade usada de pelo menos um item.";
+    return;
+  }
+  const linhas = ["Receita por garrafa"];
+  for (const insumo of [false, true]) {
+    const grupo = usados.filter(({item}) => (item.tipo === "insumo") === insumo);
+    if (!grupo.length) continue;
+    linhas.push("", insumo ? "Insumos" : "Itens do catálogo");
+    for (const {item, quantidade, custo} of grupo) {
+      linhas.push(item.nome + " · " + gramas.format(quantidade) + (insumo ? " un." : " g") + " · " + moeda.format(custo));
+    }
+  }
+  linhas.push("", "Custo total: " + moeda.format(total), "Preço de venda: " + (venda === null ? "não informado" : moeda.format(venda)));
+  const texto = linhas.join("\n");
+  try {
+    await navigator.clipboard.writeText(texto);
+    aviso.textContent = "Receita copiada.";
+  } catch {
+    const campo = el("copia-manual");
+    campo.value = texto;
+    campo.hidden = false;
+    campo.focus();
+    campo.select();
+    aviso.textContent = "Copie o texto selecionado.";
+  }
+};
 el("planilha").oninput = calcularGarrafa;
 el("novo-produto").onclick = evento => {
   evento.preventDefault();

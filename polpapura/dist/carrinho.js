@@ -7,7 +7,7 @@
     document.documentElement.style.scrollPaddingTop = (menu.offsetHeight + 8) + "px";
   }).observe(menu);
   const chave = "purapolpa.carrinho.v1";
-  const catalogo = new Map(apresentacoes.map(item => [item.volume, item.centavos]));
+  const catalogo = new Map(produtosDelivery.map(item => [item.volume, item.centavos]));
   const dinheiro = centavos => moeda.format(centavos / 100);
   let estado = { itens: [] };
   try {
@@ -67,7 +67,7 @@
       atalho.hidden = quantidade === 0;
     }
     document.querySelector(".atalho-carrinho").setAttribute("aria-label",
-      quantidade ? "Ver carrinho com " + quantidade + (quantidade === 1 ? " garrafa" : " garrafas") : "Ver carrinho vazio");
+      quantidade ? "Ver carrinho com " + quantidade + (quantidade === 1 ? " item" : " itens") : "Ver carrinho vazio");
     porId("subtotal").textContent = valor;
     porId("carrinho").hidden = quantidade === 0;
     atualizarFrete();
@@ -79,10 +79,11 @@
     const item = { volume: itemPedido.volume, quantidade,
       condimentos: new FormData(formulario).getAll("acompanhamento"),
       observacoes: porId("observacoes").value.trim() };
+    if (itemPedido.formato) item.formato = itemPedido.formato;
     const chave = chaveItem(item);
     const existente = estado.itens.find(outro => chaveItem(outro) === chave && outro.quantidade + quantidade <= 99);
     if ((!existente && estado.itens.length >= 30) || quantidade > 99) {
-      avisar("Use até 30 itens no carrinho e até 99 garrafas por item.");
+      avisar("Use até 30 itens no carrinho e até 99 unidades por item.");
     } else {
       if (existente) existente.quantidade += quantidade;
       else estado.itens.push(item);

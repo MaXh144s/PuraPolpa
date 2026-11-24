@@ -28,6 +28,11 @@ const apresentacoes = [
   { volume: "900 ml", centavos: 2990, foto: "garrafa-900.png", semRotulo: "garrafa-900-sem-rotulo.png", altura: "99%" }
 ];
 const moeda = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const copos = [
+  { volume: "330 ml", centavos: 1490, formato: "copo" },
+  { volume: "550 ml", centavos: 1990, formato: "copo" }
+];
+const produtosDelivery = [...apresentacoes, ...copos];
 
 const fotosGenericas = ["sem-rotulo-a.png", "sem-rotulo-b.png"];
 const semRotulo = document.querySelector("#sem-rotulo");
@@ -74,11 +79,11 @@ const fotoPedido = document.querySelector("#pedido-foto");
 let itemPedido = apresentacoes[0];
 let quantidade = 1;
 const volumesPedido = document.querySelector("#volumes-pedido");
-for (const [i, item] of apresentacoes.entries()) {
+for (const [i, item] of produtosDelivery.entries()) {
   const botao = document.createElement("button");
   botao.type = "button";
   botao.textContent = item.volume;
-  botao.onclick = () => escolherVolume(i, fotoApresentacao(i));
+  botao.onclick = () => abrirPedido(i);
   volumesPedido.append(botao);
 }
 
@@ -97,17 +102,24 @@ function atualizarTotal() {
   document.querySelector("#pedido-total").textContent = total;
 }
 
-function escolherVolume(i, imagem) {
-  itemPedido = apresentacoes[i];
-  carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
+function abrirPedido(i) {
+  itemPedido = produtosDelivery[i];
+  if (itemPedido.formato === "copo") {
+    fotoPedido.removeAttribute("srcset");
+    fotoPedido.src = "assets/acai-copo.webp";
+    fotoPedido.alt = "Açaí no copo";
+  } else {
+    const imagem = fotoApresentacao(i);
+    carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
+  }
+  document.querySelector("#pedido-formato").textContent = itemPedido.formato === "copo" ? "Copo" : "Garrafa";
   document.querySelector("#pedido-volume").textContent = itemPedido.volume;
   document.querySelector("#preco-unitario").textContent = moeda.format(itemPedido.centavos / 100);
-  Array.from(volumesPedido.children).forEach((botao, indice) => botao.setAttribute("aria-pressed", String(indice === i)));
+  Array.from(volumesPedido.children).forEach((botao, indice) => {
+    botao.hidden = produtosDelivery[indice].formato !== itemPedido.formato;
+    botao.setAttribute("aria-pressed", String(indice === i));
+  });
   atualizarTotal();
-}
-function abrirPedido(i) {
-  const foto = slides[i].querySelector("img");
-  escolherVolume(i, {arquivo: foto.dataset.arquivo, alt: foto.alt});
   pedido.hidden = false;
   document.querySelector("#pedido-titulo").focus({ preventScroll: true });
 }
@@ -140,7 +152,7 @@ semRotulo.onchange = () => {
 
 function agendar() {
   clearTimeout(timer);
-  if (!paused && !reduced.matches && !document.hidden && !stage.contains(document.activeElement)) {
+  if (!paused && !reduced.matches && !document.hidden && !document.querySelector("#sobre-nos").hidden && !stage.contains(document.activeElement)) {
     timer = setTimeout(() => selecionar((active + 1) % slides.length), 3000);
   }
 }

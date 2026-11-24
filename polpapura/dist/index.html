@@ -7,7 +7,7 @@
       name="description"
       content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 12,90."
     />
-    <title>PuraPolpa — Açaí em garrafa</title>
+    <title>PuraPolpa — Cardápio de delivery</title>
     <meta property="og:type" content="website" />
     <meta property="og:title" content="PuraPolpa — Açaí em garrafa" />
     <meta property="og:description" content="Conheça a PuraPolpa! Açaí trufado a partir de R$ 12,90." />
@@ -20,25 +20,65 @@
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
     <link rel="stylesheet" href="estilo.css?v=menu2" />
-    <script defer src="garrafas.js?v=carrinho1"></script>
-    <script defer src="resumo-pedido.js?v=texto1"></script>
-    <script defer src="carrinho.js?v=garrafas2"></script>
+    <link rel="stylesheet" href="delivery.css" />
+    <script defer src="garrafas.js?v=delivery1"></script>
+    <script defer src="resumo-pedido.js?v=delivery1"></script>
+    <script defer src="carrinho.js?v=delivery1"></script>
+    <script defer src="delivery.js"></script>
   </head>
   <body>
     <header class="menu-principal"><div class="wrap">
-      <a class="brand" href="#garrafas" aria-label="PuraPolpa, início"
+      <a class="brand" href="#inicio" aria-label="PuraPolpa, início"
         ><span>PuraPolpa</span></a
       >
       <nav aria-label="Principal">
         <div class="links-menu">
-          <a href="#garrafas">As garrafas</a>
-          <a href="#historia">Nossa história</a>
+          <a href="#cardapio">Cardápio</a>
+          <a href="#pesquisa">Pesquisar</a>
+          <a href="#sobre-nos">Sobre nós</a>
         </div>
         <a class="atalho-carrinho" href="#carrinho" aria-label="Ver carrinho" hidden><img src="icones/carrinho.svg" alt="" width="30" height="30"><span id="contagem" aria-hidden="true"></span></a>
       </nav>
     </div></header>
     <main>
-      <section class="hero wrap" id="garrafas" aria-labelledby="titulo">
+      <div id="inicio" class="wrap vitrine-delivery">
+        <section class="banner-delivery" aria-labelledby="titulo-delivery">
+          <div class="banner-copy">
+            <p class="origem-delivery">PuraPolpa · São Leopoldo</p>
+            <h1 id="titulo-delivery">Açaí trufado,<br><em>do seu jeito.</em></h1>
+            <p>No copo ou na garrafa, a partir de <strong>R$ 12,90.</strong></p>
+            <a class="botao-delivery" href="#cardapio">Peça já o seu <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="banner-foto"><img src="assets/delivery-purapolpa.webp" alt="Cliente com uma garrafa de açaí PuraPolpa" width="700" height="700" fetchpriority="high"></div>
+        </section>
+        <section id="cardapio" aria-labelledby="titulo-cardapio">
+          <div class="cabecalho-cardapio">
+            <h2 id="titulo-cardapio">Cardápio</h2>
+            <label class="pesquisa-menu"><span aria-hidden="true"></span><input id="pesquisa" type="search" aria-label="Pesquisar no cardápio" placeholder="Buscar produto ou tamanho"></label>
+          </div>
+          <div class="categorias-menu" role="group" aria-label="Filtrar por categoria">
+            <button type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+            <button type="button" data-filtro="garrafas" aria-pressed="false">Açaí na garrafa</button>
+            <button type="button" data-filtro="copos" aria-pressed="false">Açaí no copo</button>
+            <button type="button" data-filtro="bebidas" aria-pressed="false">Bebidas</button>
+          </div>
+          <section id="garrafas" class="secao-menu" aria-labelledby="titulo-garrafas">
+            <h3 id="titulo-garrafas">Açaí na garrafa</h3>
+            <div id="produtos-garrafa" class="produtos-menu"></div>
+          </section>
+            <section id="copos" class="secao-menu" aria-labelledby="titulo-copos">
+              <h3 id="titulo-copos">Açaí no copo</h3>
+              <div id="produtos-copo" class="produtos-menu"></div>
+            </section>
+            <section id="bebidas" class="secao-menu" aria-labelledby="titulo-bebidas">
+              <h3 id="titulo-bebidas">Bebidas</h3>
+              <p>Em breve no cardápio.</p>
+            </section>
+          <p id="sem-resultados" role="status" hidden>Nenhum item encontrado. Tente outro termo ou categoria.</p>
+        </section>
+      </div>
+      <div id="sobre-nos" hidden>
+      <section class="hero wrap" aria-labelledby="titulo">
         <div class="copy">
           <p class="kicker">Açaí em garrafa</p>
           <h1 id="titulo">Seu açaí de sempre. <em>Agora vai com você.</em></h1>
@@ -62,25 +102,26 @@
           <label class="label-choice"><input type="checkbox" id="sem-rotulo"> Ver foto sem rótulo</label>
         </div>
       </section>
+      </div>
       <section id="pedido" class="wrap pedido" aria-labelledby="pedido-titulo" hidden>
         <figure>
           <img id="pedido-foto" alt="">
-          <figcaption class="caption">Imagem ilustrativa. Sua garrafa vem com rótulo.</figcaption>
+          <figcaption class="caption">Imagem ilustrativa.</figcaption>
         </figure>
         <div>
           <p class="kicker">Seu pedido</p>
-          <h2 id="pedido-titulo" tabindex="-1">Açaí de <span id="pedido-volume"></span></h2>
+          <h2 id="pedido-titulo" tabindex="-1"><span id="pedido-formato">Garrafa</span> de <span id="pedido-volume"></span></h2>
           <form id="personalizar">
             <fieldset>
-              <legend>Volume por garrafa</legend>
+              <legend>Escolha o tamanho</legend>
               <div class="opcoes-pedido" id="volumes-pedido"></div>
-              <p class="preco-garrafa" aria-live="polite">Preço por garrafa: <strong id="preco-unitario"></strong></p>
+              <p class="preco-garrafa" aria-live="polite">Preço por unidade: <strong id="preco-unitario"></strong></p>
             </fieldset>
             <fieldset>
-              <legend>Quantidade de garrafas</legend>
+              <legend>Quantidade</legend>
               <div class="opcoes-pedido contador">
                 <button type="button" id="diminuir" aria-label="Diminuir quantidade" disabled>−</button>
-                <output id="quantidade" aria-label="Quantidade de garrafas">1</output>
+                <output id="quantidade" aria-label="Quantidade de unidades">1</output>
                 <button type="button" id="aumentar" aria-label="Aumentar quantidade">+</button>
               </div>
             </fieldset>
@@ -92,7 +133,7 @@
             </fieldset>
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>
-            <p aria-live="polite">Total das garrafas: <strong id="pedido-total"></strong></p>
+            <p aria-live="polite">Total do item: <strong id="pedido-total"></strong></p>
             <div class="acoes-carrinho">
               <button class="storylink" type="submit">Adicionar ao carrinho</button>
               <a class="storylink" href="#carrinho" hidden>Ir para o carrinho</a>
@@ -103,7 +144,7 @@
       <section id="carrinho" class="wrap compras" aria-labelledby="titulo-carrinho" hidden>
         <h2 id="titulo-carrinho" tabindex="-1">Seu carrinho</h2>
         <ul id="itens-carrinho"></ul>
-        <a href="#garrafas" class="history-link">Escolher mais garrafas</a>
+        <a href="#cardapio" class="history-link">Voltar ao cardápio</a>
         <form id="checkout">
           <fieldset id="dados-pedido">
             <legend>Finalizar pedido</legend>
@@ -112,7 +153,7 @@
             <label id="campo-endereco">Endereço de entrega, com número e bairro<input name="endereco" autocomplete="street-address" maxlength="300" required></label>
             <label>Forma de pagamento<select name="pagamento" required><option value="">Selecione</option><option>Pix</option><option>Crédito</option><option>Débito</option><option>Dinheiro</option></select></label>
             <button class="cupom" type="button" disabled>Aplicar cupom (em breve)</button>
-            <p>Subtotal das garrafas: <strong id="subtotal"></strong></p>
+            <p>Subtotal dos itens: <strong id="subtotal"></strong></p>
             <p id="frete"></p>
             <button class="storylink" type="submit" id="finalizar">Finalizar pedido</button>
           </fieldset>
@@ -123,7 +164,7 @@
           <pre class="resumo-pedido" id="texto-comprovante"></pre>
           <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Enviar pedido no WhatsApp</a>
       </div>
-      <section id="historia" aria-labelledby="hist-title">
+      <section id="historia" aria-labelledby="hist-title" hidden>
         <div class="story wrap">
           <div>
             <p class="kicker">Nossa história</p>

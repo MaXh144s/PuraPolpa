@@ -8,6 +8,7 @@ Faça a configuração abaixo antes de ativar a Supabase na Vercel. A vitrine e 
 2. Abra **SQL Editor → New query**, copie todo o arquivo [001_catalogo.sql](migrations/001_catalogo.sql) e clique em **Run**. Execute esta migração uma vez, no projeto escolhido. Ela cria as tabelas privadas, políticas RLS e duas funções públicas de acesso administrativo.
 3. Execute também [002_pedidos.sql](migrations/002_pedidos.sql) no SQL Editor desse projeto. O checkout usa a chave pública e a URL já configuradas para o painel online. Publique o site com essas variáveis depois da migração.
 4. Execute [003_insumos.sql](migrations/003_insumos.sql) no SQL Editor para habilitar o cadastro de insumos por unidade no catálogo online.
+   Para registrar pedidos de açaí no copo, execute também [004_copos.sql](migrations/004_copos.sql). A função aceita pedidos mistos e mantém os preços das garrafas existentes.
 5. Mantenha a **Data API** habilitada e o schema `public` exposto. A função `pp_registrar_pedido` recebe pedidos da vitrine e calcula o subtotal no banco. A busca por número ou nome fica no painel administrativo. O frete de entrega é combinado com o atendente no WhatsApp.
 
 ## 2. Criar e autorizar o administrador

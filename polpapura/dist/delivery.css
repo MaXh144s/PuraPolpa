@@ -1,0 +1,59 @@
+.vitrine-delivery { padding-block: clamp(1rem, 2.6vw, 2.5rem) 3.5rem; }
+.banner-delivery {
+  position: relative; isolation: isolate; overflow: hidden; display: grid;
+  grid-template-columns: 1.1fr 1fr; align-items: stretch;
+  border-radius: 1.5rem; background: #490052; color: #fffaf2;
+}
+.banner-copy { position: relative; z-index: 1; align-self: center; padding: clamp(1.6rem, 4.3vw, 4.3rem); }
+.origem-delivery { font-size: .85rem; font-weight: 700; color: #f8d963; }
+.banner-copy h1 { font-size: clamp(3.3rem, 5.9vw, 6rem); margin: .85rem 0; line-height: .96; }
+.banner-copy h1 em { display: inline; color: #f7d163; }
+.banner-copy > p:last-of-type { line-height: 1.5; }
+.botao-delivery { display: inline-flex; align-items: center; gap: 1.2rem; margin-top: 1.4rem; padding: .85rem 1.4rem; background: #f7d163; color: var(--purple); font-weight: bold; border-radius: 2rem; }
+.botao-delivery:hover { background: #ffe595; }
+.banner-foto { position: relative; min-width: 0; min-height: 100%; }
+.banner-foto::before { content: ""; position: absolute; width: 100%; aspect-ratio: 1; border-radius: 50%; background: #873d79; left: 4%; top: 10%; }
+.banner-foto img { position: absolute; right: 0; bottom: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
+#cardapio { padding-top: clamp(1.8rem, 4vw, 3.5rem); }
+.cabecalho-cardapio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+.cabecalho-cardapio h2 { font-size: clamp(2.6rem, 4vw, 4rem); line-height: 1.1; }
+.pesquisa-menu { display: flex; gap: .8rem; align-items: center; padding: .8rem 1rem; background: white; border: 1px solid #d4c4cf; border-radius: .85rem; }
+.pesquisa-menu:focus-within { outline: 2px solid var(--purple); }
+.pesquisa-menu span { width: .9rem; height: .9rem; border: 2px solid currentColor; border-radius: 50%; position: relative; }
+.pesquisa-menu span::after { content: ""; width: .42rem; height: 2px; position: absolute; right: -.32rem; bottom: -.16rem; background: currentColor; transform: rotate(45deg); }
+.pesquisa-menu input { min-width: 0; width: 17rem; border: 0; outline: 0; font: inherit; color: inherit; background: transparent; }
+.categorias-menu { display: flex; flex-wrap: wrap; gap: .5rem; padding: 1.25rem 0; border-bottom: 1px solid #e4d7df; }
+.categorias-menu button { padding: .62rem 1rem; border: 1px solid #d9c8d4; border-radius: 2rem; background: transparent; }
+.categorias-menu [aria-pressed="true"] { color: white; border-color: var(--purple); background: var(--purple); }
+.secao-menu { padding-top: 1.6rem; }
+.secao-menu h3 { margin: 0 0 .9rem; font: 400 clamp(1.65rem, 2.3vw, 2.3rem)/1.15 Display,Georgia,serif; letter-spacing: -.035em; }
+.produtos-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+.produto-menu { display: flex; align-items: center; gap: 1.1rem; padding: .75rem; border-radius: 1rem; border: 1px solid #e2d6de; background: #fff; }
+.produto-menu:hover { border-color: #975d8d; background: #fffafd; }
+.foto-menu { display: grid; place-items: center; flex: none; width: clamp(5rem, 9vw, 7.75rem); aspect-ratio: 1; border-radius: .7rem; overflow: hidden; background: #f2e7ee; }
+.foto-menu img { width: 100%; height: 100%; min-height: 0; object-fit: contain; padding: .35rem; }
+.foto-copo img { object-fit: cover; padding: 0; }
+.produto-info { display: grid; gap: .25rem; }
+.produto-info h4 { margin: 0; font-size: 1.1rem; }
+.produto-info > span { color: #6b5668; }
+.produto-info strong { margin-top: .45rem; }
+.pedir-produto { margin-left: auto; margin-right: .35rem; display: grid; place-items: center; flex: none; width: 2rem; height: 2rem; border-radius: 50%; color: var(--purple); background: #f9e6a9; font-size: 1.35rem; }
+#sem-resultados { padding: 1rem 0; }
+.vitrine-delivery [hidden], .tela-sobre #pedido, .tela-sobre #carrinho, .tela-sobre #comprovante { display: none; }
+@media (max-width: 690px) {
+  .produtos-menu { grid-template-columns: 1fr; }
+  .cabecalho-cardapio { align-items: stretch; flex-direction: column; }
+  .pesquisa-menu input { width: 100%; }
+  .banner-copy { padding: 1.4rem 0 1.5rem 1.2rem; }
+  .banner-copy h1 { font-size: clamp(2.3rem, 8.8vw, 3.75rem); }
+  .banner-copy > p { font-size: .85rem; }
+  .banner-foto img { width: 130%; max-width: none; right: -14%; }
+  .botao-delivery { padding: .7rem 1rem; margin-top: .9rem; }
+  .categorias-menu button { font-size: .88rem; padding: .55rem .78rem; }
+}
+@media (max-width: 380px) {
+  .banner-delivery { grid-template-columns: 66% 34%; }
+  .banner-foto img { width: 160%; right: -25%; }
+  .banner-copy h1 { font-size: 2.35rem; }
+  .botao-delivery { gap: .6rem; }
+}

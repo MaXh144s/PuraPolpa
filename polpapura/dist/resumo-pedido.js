@@ -1,5 +1,5 @@
 function chaveItem(item) {
-  return JSON.stringify([item.volume, [...item.condimentos].sort(), item.observacoes, item.centavos]);
+  return JSON.stringify([item.formato || "garrafa", item.volume, [...item.condimentos].sort(), item.observacoes, item.centavos]);
 }
 
 function agruparItens(itens) {
@@ -14,7 +14,7 @@ function agruparItens(itens) {
 }
 
 function descricaoItem(item, preco) {
-  return item.quantidade + " × Garrafa de " + item.volume + " · " + preco + " cada";
+  return item.quantidade + (item.formato === "copo" ? " × Copo de " : " × Garrafa de ") + item.volume + " · " + preco + " cada";
 }
 
 globalThis.resumoPedido = function (pedido) {
@@ -31,7 +31,7 @@ globalThis.resumoPedido = function (pedido) {
     linhas.push(item.condimentos.length ? item.condimentos.join(", ") : "Sem condimentos");
     if (item.observacoes) linhas.push("Observação: " + item.observacoes);
   }
-  linhas.push("", "Subtotal das garrafas: " + real(pedido.subtotal));
+  linhas.push("", "Subtotal dos itens: " + real(pedido.subtotal));
   if (pedido.modalidade === "Entrega") {
     linhas.push("Frete a combinar com o atendente pelo WhatsApp.", "Total a confirmar após o frete.");
   } else {

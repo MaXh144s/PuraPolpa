@@ -37,6 +37,11 @@
 .produto-info h4 { margin: 0; font-size: 1.1rem; }
 .produto-info > span { color: #6b5668; }
 .produto-info strong { margin-top: .45rem; }
+.produto-info select { justify-self: start; font: inherit; color: inherit; border-radius: .5rem; border: 1px solid #d9c8d4; padding: .35rem; background: white; }
+article.produto-menu { position: relative; }
+article.produto-menu .pedir-produto::after { content: ""; position: absolute; inset: 0; border-radius: 1rem; }
+article.produto-menu select { position: relative; z-index: 1; }
+.produto-info del, .preco-garrafa del { color: #6b5668; }
 .pedir-produto { margin-left: auto; margin-right: .35rem; display: grid; place-items: center; flex: none; width: 2rem; height: 2rem; border-radius: 50%; color: var(--purple); background: #f9e6a9; font-size: 1.35rem; }
 #sem-resultados { padding: 1rem 0; }
 .vitrine-delivery [hidden], .tela-sobre #pedido, .tela-sobre #carrinho, .tela-sobre #comprovante { display: none; }

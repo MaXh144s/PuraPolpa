@@ -3,14 +3,19 @@
   const filtros = document.querySelectorAll("[data-filtro]");
   const normalizar = texto => texto.toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/(\d)\s+ml/g, "$1ml");
   let categoria = "todos";
-  const cards = produtosDelivery.map((item, indice) => {
+  const modelos = new Map();
+  for (const item of produtosDelivery) {
+    const chave = item.formato === "copo" ? (item.sabor || "Açaí no copo") : item.volume;
+    if (!modelos.has(chave)) modelos.set(chave, []);
+    modelos.get(chave).push(item);
+  }
+  const cards = [...modelos.values()].map(opcoes => {
+    const item = opcoes[0];
+    let escolhido = item;
     const copo = item.formato === "copo";
     const nome = item.sabor || (copo ? "Açaí no copo" : "Açaí na garrafa");
-    const card = document.createElement("a");
+    const card = document.createElement(copo ? "article" : "a");
     card.className = "produto-menu";
-    card.href = "#pedido";
-    card.setAttribute("aria-label", "Pedir " + nome + " de " + item.volume + " por " + moeda.format(item.centavos / 100));
-    card.onclick = () => abrirPedido(indice);
     const foto = new Image();
     foto.loading = "lazy";
     if (copo) {
@@ -29,16 +34,31 @@
     titulo.textContent = nome;
     const tamanho = document.createElement("span");
     tamanho.textContent = item.volume;
-    const preco = document.createElement("strong");
-    preco.textContent = moeda.format(item.centavos / 100);
-    const adicionar = document.createElement("span");
+    const preco = document.createElement("div");
+    const adicionar = document.createElement(copo ? "a" : "span");
     adicionar.className = "pedir-produto";
-    adicionar.setAttribute("aria-hidden", "true");
+    const pedir = copo ? adicionar : card;
+    if (!copo) adicionar.setAttribute("aria-hidden", "true");
+    pedir.href = "#pedido";
+    pedir.onclick = () => abrirPedido(produtosDelivery.indexOf(escolhido));
     adicionar.textContent = "+";
-    info.append(titulo, tamanho, preco);
+    const seletor = document.createElement("select");
+    if (copo) {
+      seletor.setAttribute("aria-label", "Tamanho de " + nome);
+      for (const opcao of opcoes) seletor.add(new Option(opcao.volume, opcao.volume));
+      seletor.onchange = () => selecionarTamanho(seletor.value);
+    }
+    function selecionarTamanho(volume) {
+      escolhido = opcoes.find(opcao => opcao.volume === volume) || item;
+      seletor.value = escolhido.volume;
+      mostrarPrecoProduto(preco, escolhido);
+      pedir.setAttribute("aria-label", "Pedir " + nome + " de " + escolhido.volume + " por " + moeda.format(escolhido.centavos / 100));
+    }
+    selecionarTamanho(item.volume);
+    info.append(titulo, copo ? seletor : tamanho, preco);
     card.append(moldura, info, adicionar);
     document.querySelector(copo ? "#produtos-copo" : "#produtos-garrafa").append(card);
-    return { card, categoria: copo ? "copos" : "garrafas", texto: normalizar([nome, item.volume, copo ? "açaí no copo" : "trufado", ...(item.complementos || [])].join(" ")) };
+    return { card, opcoes, selecionarTamanho, categoria: copo ? "copos" : "garrafas", texto: normalizar([nome, ...opcoes.map(o => o.volume), copo ? "açaí no copo" : "trufado", ...(item.complementos || [])].join(" ")) };
   });
 
   function filtrar() {
@@ -48,6 +68,8 @@
       produto.card.hidden = (categoria !== "todos" && produto.categoria !== categoria) ||
         !termos.every(termo => produto.texto.includes(termo));
       if (!produto.card.hidden) visiveis.add(produto.categoria);
+      const tamanho = produto.opcoes.find(opcao => termos.includes(normalizar(opcao.volume)));
+      if (!produto.card.hidden && tamanho) produto.selecionarTamanho(tamanho.volume);
     }
     if (["todos","bebidas"].includes(categoria) && termos.every(termo => "bebidas".includes(termo))) visiveis.add("bebidas");
     document.querySelectorAll(".secao-menu").forEach(secao => { secao.hidden = !visiveis.has(secao.id); });

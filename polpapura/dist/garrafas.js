@@ -28,6 +28,17 @@ const apresentacoes = [
   { volume: "900 ml", centavos: 2990, foto: "garrafa-900.png", semRotulo: "garrafa-900-sem-rotulo.png", altura: "99%" }
 ];
 const moeda = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+function mostrarPrecoProduto(elemento, item) {
+  elemento.replaceChildren();
+  if (item.anterior > item.centavos) {
+    const anterior = document.createElement("del");
+    anterior.textContent = moeda.format(item.anterior / 100);
+    elemento.append("De ", anterior, " por ");
+  }
+  const atual = document.createElement("strong");
+  atual.textContent = moeda.format(item.centavos / 100);
+  elemento.append(atual);
+}
 const copos = [
   { volume: "330 ml", centavos: 1490, formato: "copo" },
   { volume: "550 ml", centavos: 1990, formato: "copo" }
@@ -136,7 +147,7 @@ function abrirPedido(i) {
   }
   document.querySelector("#pedido-formato").textContent = itemPedido.sabor || (itemPedido.formato === "copo" ? "Copo" : "Garrafa");
   document.querySelector("#pedido-volume").textContent = itemPedido.volume;
-  document.querySelector("#preco-unitario").textContent = moeda.format(itemPedido.centavos / 100);
+  mostrarPrecoProduto(document.querySelector("#preco-unitario"), itemPedido);
   Array.from(volumesPedido.children).forEach((botao, indice) => {
     botao.hidden = produtosDelivery[indice].formato !== itemPedido.formato || produtosDelivery[indice].sabor !== itemPedido.sabor;
     botao.setAttribute("aria-pressed", String(indice === i));

@@ -67,6 +67,12 @@
     document.querySelector("#sobre-nos").hidden = !sobre;
     document.querySelector("#historia").hidden = !sobre;
     document.body.classList.toggle("tela-sobre", sobre);
+    const destino = ["#pedidos", "#pedido", "#carrinho", "#comprovante"].includes(hash)
+      ? "#pedidos" : hash === "#pesquisa" ? "#pesquisa" : "#inicio";
+    document.querySelectorAll(".nav-inferior a").forEach(link => {
+      if (!sobre && link.hash === destino) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
     if (sobre) agendar();
     else clearTimeout(timer);
     if (hash === "#garrafas") {
@@ -77,8 +83,19 @@
     if (hash === "#pesquisa") busca.focus();
     if (hash === "#pedido" && pedido.hidden) abrirPedido(0);
     const alvo = document.getElementById(hash.slice(1));
-    if (alvo && !alvo.hidden) alvo.scrollIntoView();
+    if (hash === "#inicio") window.scrollTo({ top: 0 });
+    else if (alvo && !alvo.hidden) alvo.scrollIntoView();
   }
+  document.querySelector('.nav-inferior a[href="#pesquisa"]').onclick = () => {
+    document.querySelector("#inicio").hidden = false;
+    busca.focus();
+  };
+  document.querySelector('.nav-inferior a[href="#inicio"]').onclick = evento => {
+    if (location.hash === "#inicio") {
+      evento.preventDefault();
+      window.scrollTo({ top: 0 });
+    }
+  };
   window.addEventListener("hashchange", mostrarTela);
   mostrarTela();
 })();

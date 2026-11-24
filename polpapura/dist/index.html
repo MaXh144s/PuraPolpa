@@ -20,11 +20,11 @@
     <!-- fotos responsivas -->
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
     <link rel="stylesheet" href="estilo.css?v=menu2" />
-    <link rel="stylesheet" href="delivery.css" />
+    <link rel="stylesheet" href="delivery.css?v=nav2" />
     <script defer src="garrafas.js?v=delivery1"></script>
     <script defer src="resumo-pedido.js?v=delivery1"></script>
-    <script defer src="carrinho.js?v=delivery1"></script>
-    <script defer src="delivery.js"></script>
+    <script defer src="carrinho.js?v=nav2"></script>
+    <script defer src="delivery.js?v=nav2"></script>
   </head>
   <body>
     <header class="menu-principal"><div class="wrap">
@@ -141,6 +141,12 @@
           </form>
         </div>
       </section>
+      <div id="pedidos">
+      <section class="wrap compras pedidos-vazios">
+        <h2>Pedidos</h2>
+        <p>Seu carrinho está vazio.</p>
+        <a class="history-link" href="#cardapio">Escolher no cardápio</a>
+      </section>
       <section id="carrinho" class="wrap compras" aria-labelledby="titulo-carrinho" hidden>
         <h2 id="titulo-carrinho" tabindex="-1">Seu carrinho</h2>
         <ul id="itens-carrinho"></ul>
@@ -163,6 +169,7 @@
       <div id="comprovante" class="wrap" hidden>
           <pre class="resumo-pedido" id="texto-comprovante"></pre>
           <a class="storylink" id="enviar-pedido" target="_blank" rel="noopener noreferrer">Enviar pedido no WhatsApp</a>
+      </div>
       </div>
       <section id="historia" aria-labelledby="hist-title" hidden>
         <div class="story wrap">
@@ -222,5 +229,10 @@
         </div>
       </dl>
     </footer>
+    <nav class="nav-inferior" aria-label="Navegação rápida">
+      <a href="#inicio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3z"/></svg>Início</a>
+      <a href="#pesquisa"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>Buscar</a>
+      <a href="#pedidos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14v18l-3-2-4 2-4-2-3 2zM9 8h6m-6 4h6"/></svg>Pedidos</a>
+    </nav>
   </body>
 </html>

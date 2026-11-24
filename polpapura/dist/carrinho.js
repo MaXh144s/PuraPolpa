@@ -4,7 +4,7 @@
   const campos = checkout.elements;
   const menu = document.querySelector(".menu-principal");
   new ResizeObserver(() => {
-    document.documentElement.style.scrollPaddingTop = (menu.offsetHeight + 8) + "px";
+    document.documentElement.style.setProperty("--altura-cabecalho", menu.offsetHeight + "px");
   }).observe(menu);
   const chave = "purapolpa.carrinho.v1";
   const catalogo = new Map(produtosDelivery.map(item => [item.volume, item.centavos]));

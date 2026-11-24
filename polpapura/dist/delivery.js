@@ -5,7 +5,7 @@
   let categoria = "todos";
   const cards = produtosDelivery.map((item, indice) => {
     const copo = item.formato === "copo";
-    const nome = copo ? "Açaí no copo" : "Açaí na garrafa";
+    const nome = item.sabor || (copo ? "Açaí no copo" : "Açaí na garrafa");
     const card = document.createElement("a");
     card.className = "produto-menu";
     card.href = "#pedido";
@@ -14,7 +14,7 @@
     const foto = new Image();
     foto.loading = "lazy";
     if (copo) {
-      foto.src = "assets/acai-copo.webp";
+      foto.src = "assets/" + (item.foto || "acai-copo.webp");
       foto.alt = "";
     } else {
       carregarFoto(foto, item.foto, "");
@@ -38,7 +38,7 @@
     info.append(titulo, tamanho, preco);
     card.append(moldura, info, adicionar);
     document.querySelector(copo ? "#produtos-copo" : "#produtos-garrafa").append(card);
-    return { card, categoria: copo ? "copos" : "garrafas", texto: normalizar(nome + " " + item.volume + (copo ? "" : " trufado")) };
+    return { card, categoria: copo ? "copos" : "garrafas", texto: normalizar([nome, item.volume, copo ? "açaí no copo" : "trufado", ...(item.complementos || [])].join(" ")) };
   });
 
   function filtrar() {

@@ -80,6 +80,7 @@
       condimentos: new FormData(formulario).getAll("acompanhamento"),
       observacoes: porId("observacoes").value.trim() };
     if (itemPedido.formato) item.formato = itemPedido.formato;
+    if (itemPedido.sabor) item.sabor = itemPedido.sabor;
     const chave = chaveItem(item);
     const existente = estado.itens.find(outro => chaveItem(outro) === chave && outro.quantidade + quantidade <= 99);
     if ((!existente && estado.itens.length >= 30) || quantidade > 99) {

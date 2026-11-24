@@ -21,10 +21,10 @@
     <link rel="icon" type="image/png" sizes="40x40" href="icones/favicon.png" />
     <link rel="stylesheet" href="estilo.css?v=menu2" />
     <link rel="stylesheet" href="delivery.css?v=nav2" />
-    <script defer src="garrafas.js?v=delivery1"></script>
-    <script defer src="resumo-pedido.js?v=delivery1"></script>
-    <script defer src="carrinho.js?v=nav2"></script>
-    <script defer src="delivery.js?v=nav2"></script>
+    <script defer src="garrafas.js?v=sabores1"></script>
+    <script defer src="resumo-pedido.js?v=sabores1"></script>
+    <script defer src="carrinho.js?v=sabores1"></script>
+    <script defer src="delivery.js?v=sabores1"></script>
   </head>
   <body>
     <header class="menu-principal"><div class="wrap">
@@ -126,10 +126,8 @@
               </div>
             </fieldset>
             <fieldset>
-              <legend>Escolha os condimentos</legend>
-              <label><input type="checkbox" name="acompanhamento" value="Musse de maracujá" checked> Musse de maracujá</label>
-              <label><input type="checkbox" name="acompanhamento" value="Leite em pó" checked> Leite em pó</label>
-              <label><input type="checkbox" name="acompanhamento" value="Leite condensado" checked> Leite condensado</label>
+              <legend>Escolha os complementos</legend>
+              <div id="opcoes-complementos"></div>
             </fieldset>
             <label for="observacoes">Observações <small>(opcional)</small></label>
             <textarea id="observacoes" rows="2" maxlength="500" placeholder="Ex.: coloque pouco leite condensado."></textarea>

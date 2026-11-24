@@ -32,7 +32,14 @@ const copos = [
   { volume: "330 ml", centavos: 1490, formato: "copo" },
   { volume: "550 ml", centavos: 1990, formato: "copo" }
 ];
-const produtosDelivery = [...apresentacoes, ...copos];
+const classicos = ["Musse de maracujá", "Leite em pó", "Leite condensado"];
+const complementosDuplos = ["Creme de chocolate branco", "Paçoca", "Creme de avelã", "Leite em pó", "Leite condensado"];
+const sabores = [
+  { sabor: "Tentação em Dobro", foto: "tentacao-em-dobro.webp", complementos: complementosDuplos },
+  { sabor: "Explosão de Paçoca", foto: "explosao-de-pacoca.webp", complementos: complementosDuplos },
+  { sabor: "Branca de Neve", foto: "branca-de-neve.webp", complementos: ["Creme de chocolate branco", "Leite em pó", "Leite condensado"] }
+];
+const produtosDelivery = [...apresentacoes, ...copos, ...sabores.flatMap(sabor => copos.map(copo => ({ ...copo, ...sabor })))];
 
 const fotosGenericas = ["sem-rotulo-a.png", "sem-rotulo-b.png"];
 const semRotulo = document.querySelector("#sem-rotulo");
@@ -103,20 +110,35 @@ function atualizarTotal() {
 }
 
 function abrirPedido(i) {
+  const anterior = itemPedido;
   itemPedido = produtosDelivery[i];
+  const opcoes = document.querySelector("#opcoes-complementos");
+  if (!opcoes.children.length || anterior.sabor !== itemPedido.sabor || anterior.formato !== itemPedido.formato) {
+    opcoes.replaceChildren();
+    for (const nome of itemPedido.complementos || classicos) {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "acompanhamento";
+      input.value = nome;
+      input.checked = true;
+      label.append(input, " " + nome);
+      opcoes.append(label);
+    }
+  }
   if (itemPedido.formato === "copo") {
     fotoPedido.removeAttribute("srcset");
-    fotoPedido.src = "assets/acai-copo.webp";
-    fotoPedido.alt = "Açaí no copo";
+    fotoPedido.src = "assets/" + (itemPedido.foto || "acai-copo.webp");
+    fotoPedido.alt = itemPedido.sabor || "Açaí no copo";
   } else {
     const imagem = fotoApresentacao(i);
     carregarFoto(fotoPedido, imagem.arquivo, imagem.alt);
   }
-  document.querySelector("#pedido-formato").textContent = itemPedido.formato === "copo" ? "Copo" : "Garrafa";
+  document.querySelector("#pedido-formato").textContent = itemPedido.sabor || (itemPedido.formato === "copo" ? "Copo" : "Garrafa");
   document.querySelector("#pedido-volume").textContent = itemPedido.volume;
   document.querySelector("#preco-unitario").textContent = moeda.format(itemPedido.centavos / 100);
   Array.from(volumesPedido.children).forEach((botao, indice) => {
-    botao.hidden = produtosDelivery[indice].formato !== itemPedido.formato;
+    botao.hidden = produtosDelivery[indice].formato !== itemPedido.formato || produtosDelivery[indice].sabor !== itemPedido.sabor;
     botao.setAttribute("aria-pressed", String(indice === i));
   });
   atualizarTotal();

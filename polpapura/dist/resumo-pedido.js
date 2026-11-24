@@ -1,5 +1,5 @@
 function chaveItem(item) {
-  return JSON.stringify([item.formato || "garrafa", item.volume, [...item.condimentos].sort(), item.observacoes, item.centavos]);
+  return JSON.stringify([item.formato || "garrafa", item.sabor || "", item.volume, [...item.condimentos].sort(), item.observacoes, item.centavos]);
 }
 
 function agruparItens(itens) {
@@ -14,7 +14,8 @@ function agruparItens(itens) {
 }
 
 function descricaoItem(item, preco) {
-  return item.quantidade + (item.formato === "copo" ? " × Copo de " : " × Garrafa de ") + item.volume + " · " + preco + " cada";
+  const nome = item.sabor || (item.formato === "copo" ? "Copo" : "Garrafa");
+  return item.quantidade + " × " + nome + " de " + item.volume + " · " + preco + " cada";
 }
 
 globalThis.resumoPedido = function (pedido) {

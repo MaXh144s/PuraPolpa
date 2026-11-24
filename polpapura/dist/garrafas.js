@@ -50,7 +50,7 @@ const sabores = [
   { sabor: "Explosão de Paçoca", foto: "explosao-de-pacoca.webp", complementos: complementosDuplos },
   { sabor: "Branca de Neve", foto: "branca-de-neve.webp", complementos: ["Creme de chocolate branco", "Leite em pó", "Leite condensado"] }
 ];
-const produtosDelivery = [...apresentacoes, ...copos, ...sabores.flatMap(sabor => copos.map(copo => ({ ...copo, ...sabor })))];
+const produtosDelivery = [...apresentacoes, ...sabores.flatMap(sabor => copos.map(copo => ({ ...copo, ...sabor })))];
 
 const fotosGenericas = ["sem-rotulo-a.png", "sem-rotulo-b.png"];
 const semRotulo = document.querySelector("#sem-rotulo");
